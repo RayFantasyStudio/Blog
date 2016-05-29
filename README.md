@@ -16,10 +16,10 @@ go get github.com/RayFantasyStudio/blog
 mysqluser = "user"
 
 # 访问数据库的密码
-mysqlpass = "password"
+mysqlpwd = "password"
 
 # SQL Server的主机名/IP地址/域名
-mysqlurls = "localhost"
+mysqlhost = "localhost"
 
 # 访问SQL Server的端口
 mysqlport = 3306
