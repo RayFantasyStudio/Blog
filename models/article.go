@@ -21,10 +21,9 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticleList(category, tag string) ([]*Article, error) {
+func GetArticleList(category, tag string) (articles []*Article, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
-	articles := make([]*Article, 0)
 
 	if len(category) > 0 {
 		query = query.Filter("category", category)
@@ -32,18 +31,17 @@ func GetArticleList(category, tag string) ([]*Article, error) {
 	if len(tag) > 0 {
 		query = query.Filter("tag", tag)
 	}
-	_, err := query.All(&articles)
+	_, err = query.All(&articles)
 	return articles, err
 }
-func GetArticle(id int64) (Article, error) {
+func GetArticle(id int64) (article *Article, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
-	article := new(Article)
-	err := query.Filter("id", id).One(article)
+	err = query.Filter("id", id).One(article)
 	article.ViewCount++
 	return article, err
 }
-func AddAritcle(article Article) error {
+func AddAritcle(article *Article) error {
 	o := orm.NewOrm()
 	_, err := o.Insert(article)
 	return err
