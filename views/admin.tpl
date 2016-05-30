@@ -15,7 +15,7 @@
         <a class="item" style="">
             我是头像
         </a>
-        <a class="item active">
+        <a class="item">
             <h4>userName</h4>
         </a>
         <a class="item" data-tab="article">
@@ -51,7 +51,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                [[range .articlelist]]
+                [[range .Articles]]
                 <tr>
                     <td>[[.Title]]</td>
                     <td>[[.Subtitle]]</td>
@@ -89,13 +89,13 @@
                 </tfoot>
             </table>
         </div>
-        <div class="ui tab active" data-tab="category">
+        <div class="ui tab" data-tab="category">
         </div>
-        <div class="ui tab active" data-tab="tag">
+        <div class="ui tab" data-tab="tag">
         </div>
-        <div class="ui tab active" data-tab="reply">
+        <div class="ui tab" data-tab="reply">
         </div>
-        <div class="ui tab active" data-tab="user">
+        <div class="ui tab" data-tab="user">
         </div>
     </div>
 </div>

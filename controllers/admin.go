@@ -9,18 +9,18 @@ type AdminController  struct {
 	beego.Controller
 }
 
-func (c *AdminController) Get()  {
-	categoryList, err := models.GetCategoryList()
+func (c *AdminController) Get() {
+	categories, err := models.GetCategoryList()
 	if err != nil {
 		beego.Error(err)
 	}
-	c.Data["categorylist"] = categoryList
+	c.Data["Categories"] = categories
 
-	articleList,err := models.GetArticleList("","")
+	articles, err := models.GetArticleList("", "")
 	if err != nil {
 		beego.Error(err)
 	}
-	c.Data["articlelist"] = articleList
+	c.Data["Articles"] = articles
 
 	c.TplName = "admin.tpl"
 }
