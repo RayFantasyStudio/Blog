@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <link rel="image_src" type="image/jpeg" href="/static/img/logo.png">
     <link href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css" class="ui" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
     <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
     <script>
@@ -36,63 +37,7 @@
                 })
         ;
     </script>
-    <style type="text/css">
 
-        body {
-            background-color: #FFFFFF;
-        }
-
-        .main.container {
-            margin-top: 2em;
-        }
-
-        .main.menu {
-            margin-top: 4em;
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-            transition: box-shadow 0.5s ease,
-            padding 0.5s ease;
-        }
-
-        .main.menu .item img.logo {
-            margin-right: 1.5em;
-        }
-
-        .overlay {
-            float: left;
-            margin: 0em 3em 1em 0em;
-        }
-
-        .overlay .menu {
-            position: relative;
-            left: 0;
-            transition: left 0.5s ease;
-        }
-
-        .main.menu.fixed {
-            background-color: #FFFFFF;
-            border: 1px solid #DDD;
-            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .overlay.fixed .menu {
-            left: 800px;
-        }
-
-        .text.container .left.floated.image {
-            margin: 2em 2em 2em -4em;
-        }
-
-        .text.container .right.floated.image {
-            margin: 2em -4em 2em 2em;
-        }
-
-        .ui.footer.segment {
-            margin: 5em 0em 0em;
-            padding: 5em 0em;
-        }
-    </style>
 </head>
 
 <body>
@@ -104,29 +49,46 @@
 
 <div class="ui borderless main menu">
     <div class="ui text container">
-        <div href="#" class="header item">
-            [[.User]]
-        </div>
-        <a href="#" class="item">Blog</a>
-        <a href="#" class="item">Articles</a>
-        <a href="#" class="ui right floated dropdown item" tabindex="0">
-            Dropdown <i class="dropdown icon"></i>
-            <div class="menu transition hidden" tabindex="-1">
-                <div class="item">Link Item</div>
-                <div class="item">Link Item</div>
-                <div class="divider"></div>
-                <div class="header">Header Item</div>
-                <div class="item">
-                    <i class="dropdown icon"></i>
-                    Sub Menu
-                    <div class="menu transition hidden">
-                        <div class="item">Link Item</div>
-                        <div class="item">Link Item</div>
+
+            <a class="item">
+                Home
+            </a>
+            <div class="ui pointing dropdown link item">
+                <span class="text">Shopping</span>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="header">Categories</div>
+                    <div class="item">
+                        <i class="dropdown icon"></i>
+                        <span class="text">Clothing</span>
+                        <div class="menu">
+                            <div class="header">Mens</div>
+                            <div class="item">Shirts</div>
+                            <div class="item">Pants</div>
+                            <div class="item">Jeans</div>
+                            <div class="item">Shoes</div>
+                            <div class="divider"></div>
+                            <div class="header">Womens</div>
+                            <div class="item">Dresses</div>
+                            <div class="item">Shoes</div>
+                            <div class="item">Bags</div>
+                        </div>
                     </div>
+                    <div class="item">Home Goods</div>
+                    <div class="item">Bedroom</div>
+                    <div class="divider"></div>
+                    <div class="header">Order</div>
+                    <div class="item">Status</div>
+                    <div class="item">Cancellations</div>
                 </div>
-                <div class="item">Link Item</div>
             </div>
-        </a>
+            <a class="item">
+                Forums
+            </a>
+            <a class="item">
+                Contact Us
+            </a>
+
     </div>
 </div>
 

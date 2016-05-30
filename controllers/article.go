@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
 	"time"
+	"strings"
 )
 
 type ArticleController  struct {
@@ -31,9 +32,26 @@ func (c *ArticleController) Post() {
 	if err != nil {
 		beego.Error(err)
 	}
+
+	//处理标签
+	raw_tags := c.Input().Get("tags")
+	tags := strings.Split(raw_tags," ")
+	for _,x := range tags{
+		tag := models.Tag{
+			Name:x,
+		}
+		err := models.AddTag(tag)
+		if err != nil {
+			beego.Error(err)
+			break;
+		}
+	}
 	c.Redirect("/", 302)
 
 }
 func (c *ArticleController) Create() {
 	c.TplName = "Add_Article.tpl"
+}
+func (c *ArticleController) View(){
+	c.TplName = "Article_View.tpl"
 }
