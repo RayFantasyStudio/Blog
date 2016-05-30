@@ -137,7 +137,7 @@
             <div class="content">
                 <a class="header">[[$article.Title]]</a>
                 <div class="meta">
-                    <a>[[$article.Created]]</a>
+                    <a>[[$article.Created | SinceTime]]</a>
                     <a>Category</a>
                 </div>
                 <div class="description">

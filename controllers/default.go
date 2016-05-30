@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
-	"time"
-	"strconv"
+
+	"blog_allen/controllers/ExtraUnit"
 )
 
 type MainController struct {
@@ -14,18 +14,12 @@ type MainController struct {
 func (c *MainController) Get() {
 	c.Data["Owner"] = "RayFantasy Studio"
 	c.Data["User"] = "访客"
-	var articles []*models.Article
-	for i := 0; i < 10; i++ {
-		article := &models.Article{
-			Title:"title" + strconv.Itoa(i),
-			Subtitle:"subtitile" + strconv.Itoa(i),
-			Content:"content" + strconv.Itoa(i),
-			Author:"ztc",
-			Created:time.Now(),
-			Updated:time.Now(),
-		}
-		articles = append(articles, article)
+	var err error
+	c.Data["Articles"],err  = models.GetArticleList("","")
+	if err != nil {
+		beego.Error(err)
 	}
-	c.Data["Articles"] = articles
+	beego.AddFuncMap("SinceTime",controllers.SinceTime)
+
 	c.TplName = "index.tpl"
 }
