@@ -30,6 +30,9 @@
         <a class="item" data-tab="reply">
             <h4>回复管理</h4>
         </a>
+        <a class="item" data-tab="user">
+            <h4>账户信息更改</h4>
+        </a>
         <a class="item" style="background-color: red">
             <h4>登出</h4>
         </a>
@@ -91,6 +94,8 @@
         <div class="ui tab active" data-tab="tag">
         </div>
         <div class="ui tab active" data-tab="reply">
+        </div>
+        <div class="ui tab active" data-tab="user">
         </div>
     </div>
 </div>
