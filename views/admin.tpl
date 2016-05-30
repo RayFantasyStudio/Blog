@@ -33,11 +33,54 @@
         <a class="item" data-tab="user">
             <h4>账户信息更改</h4>
         </a>
-        <a class="item" style="background-color: red">
+        <a class="item" id="logout-btn">
             <h4>登出</h4>
         </a>
     </div>
     <div class="ui container" id="container">
+        <div class="ui card" id="filter-card">
+            <div class="ui accordion field">
+                <div class="title active"><i class="icon dropdown"></i> 过滤器</div>
+                <div class="content field" id="filter-container">
+                    <div class="ui divider"></div>
+                    <div class="ui floating dropdown labeled icon button">
+                        <i class="filter icon"></i>
+                        <span class="text">分类过滤器</span>
+                        <div class="menu">
+                            <div class="ui icon search input">
+                                <i class="search icon"></i>
+                                <input type="text" placeholder="搜索分类">
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                <i class="tags icon"></i>
+                                分类
+                            </div>
+                            <div class="scrolling menu">
+                                <div class="item">
+                                    <div class="ui red empty circular label"></div>
+                                    全部
+                                </div>
+                                [[range .Categories]]
+                                <div class="item">
+                                    <div class="ui red empty circular label"></div>
+                                    [[.Name]]
+                                </div>
+                                [[end]]
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <label>标签过滤</label>
+                    <select class="ui fluid search dropdown" multiple="">
+                        <option value="">全部</option>
+                        <option value="AL">Alabama</option>
+                    </select>
+
+
+                </div>
+            </div>
+        </div>
         <div class="ui tab" data-tab="article">
             <table class="ui celled table">
                 <thead>
@@ -236,11 +279,6 @@
 
 <!-- tabs支持 -->
 <script src="//cdn.bootcss.com/jquery.address/1.6/jquery.address.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('.tabs.menu .item').tab({history : true});
-    })
-</script>
-
+<script src="/static/js/admin.js" type="text/javascript"></script>
 </body>
 </html>
