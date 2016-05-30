@@ -21,7 +21,7 @@
         <a class="item" href="/admin/article">
             <h4>文章管理</h4>
         </a>
-        <a class="item">
+        <a class="item" href="/admin/category">
             <h4>分类管理</h4>
         </a>
         <a class="item">
@@ -29,6 +29,9 @@
         </a>
         <a class="item">
             <h4>回复管理</h4>
+        </a>
+        <a class="item">
+            <h4>账户信息更改</h4>
         </a>
         <a class="item" style="background-color: red">
             <h4>登出</h4>

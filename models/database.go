@@ -13,7 +13,7 @@ func init(){
 	mysqlDb := beego.AppConfig.String("mysqldb")
 
 	//数据库初始化
-	orm.RegisterModel(new(Article))
+	orm.RegisterModel(new(Article),new(Category),new(Tag))
 	orm.RegisterDriver("mysql",orm.DRMySQL)
 	orm.RegisterDataBase("default","mysql",
 		mysqlUser + ":" + mysqlPwd + "@tcp(" + mysqlHost + ":" + mysqlPort + ")/" + mysqlDb + "?charset=utf8&loc=Asia%2FChongqing", 30, 200)

@@ -17,10 +17,10 @@
         <a class="item">
             <h4>userName</h4>
         </a>
-        <a class="active item" href="/admin/article">
+        <a class="item" href="/admin/article">
             <h4>文章管理</h4>
         </a>
-        <a class="item" href="/admin/category">
+        <a class="active item" href="/admin/category">
             <h4>分类管理</h4>
         </a>
         <a class="item">
@@ -41,37 +41,29 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>标题</th>
-                <th>副标题</th>
-                <th>标签</th>
-                <th>时间</th>
-                <th>回复数/查看数</th>
+                <th>名称</th>
+                <th>创建日期</th>
+                <th>文章数</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            [[range .articlelist]]
+            [[range .categorylist]]
             <tr>
                 <td>[[.Id]]</td>
-                <td>[[.Title]]</td>
-                <td>[[.Subtitle]]</td>
-                <td>[[.tag]]</td>
-                <td>创建于:[[.Created]]<br>
-                    更新于:[[.Updated]]
-                </td>
-                <td>被查看 [[.Created]] 次<br>
-                    共 [[.Updated]] 条回复
-                </td>
+                <td>[[.Name]]</td>
+                <td>创建于:[[.Created]]</td>
+                <td>共有 [[.ArticleCount]] 篇文章</td>
                 <td>
-                    <a href="/admin/article?op=delete">删除</a><br>
-                    <a href="/">修改</a>
+                    <a href="/admin/category?op=delete">删除</a><br>
+                    <a href="/">重命名</a>
                 </td>
             </tr>
             [[end]]
             </tbody>
             <tfoot>
             <tr>
-                <th colspan="7">
+                <th colspan="5">
                     <div class="ui right floated pagination menu">
                         <a class="icon item">
                             <i class="left chevron icon"></i>
