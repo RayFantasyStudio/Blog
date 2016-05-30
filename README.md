@@ -10,7 +10,7 @@ go get github.com/RayFantasyStudio/blog
 ```
 
 ### 2. 配置数据库
-目前仅支持MySQL/MariaDb，确认安装好SQL Server后，在`<GOPATH>/github.com/RayFantasyStudio/blog/conf`中，新建名为`mysql.conf`的文件，写入以下内容
+目前仅支持MySQL/MariaDb，确认安装好SQL Server后，如果你使用Windows在`<GOPATH>/github.com/RayFantasyStudio/blog`中，如果你使用Linux在`<GOPATH>/github.com/RayFantasyStudio/blog/conf`中，新建名为`mysql.conf`的文件，写入以下内容
 ```
 # 访问数据库的用户名
 mysqluser = "user"
