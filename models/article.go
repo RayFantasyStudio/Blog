@@ -44,5 +44,8 @@ func GetArticle(id int64) (article *Article, err error) {
 func AddAritcle(article *Article) error {
 	o := orm.NewOrm()
 	_, err := o.Insert(article)
+
+	//添加分类
+
 	return err
 }

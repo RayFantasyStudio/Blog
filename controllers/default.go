@@ -3,8 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
-
-	"blog_allen/controllers/ExtraUnit"
+	"github.com/RayFantasyStudio/blog/utils"
 )
 
 type MainController struct {
@@ -19,7 +18,7 @@ func (c *MainController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-	beego.AddFuncMap("SinceTime",controllers.SinceTime)
+	beego.AddFuncMap("SinceTime",utils.SinceTime)
 
 	c.TplName = "index.tpl"
 }
