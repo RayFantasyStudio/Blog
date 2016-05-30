@@ -5,8 +5,6 @@ import (
 	_"github.com/go-sql-driver/mysql"
 	"github.com/astaxie/beego"
 )
-const (
-)
 func init(){
 	mysqlUser := beego.AppConfig.String("mysqluser")
 	mysqlPwd := beego.AppConfig.String("mysqlpwd")
