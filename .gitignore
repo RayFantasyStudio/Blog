@@ -26,4 +26,4 @@ _testmain.go
 *.prof
 .idea
 mysql.conf
-conf/mysql.conf
+mysql.conf
