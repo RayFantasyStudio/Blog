@@ -98,7 +98,6 @@
                 <tr>
                     <td>[[.Title]]</td>
                     <td>[[.Subtitle]]</td>
-                    <td>[[.tag]]</td>
                     <td>创建于:[[.Created]]<br>
                         更新于:[[.Updated]]
                     </td>
