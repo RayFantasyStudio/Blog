@@ -24,12 +24,12 @@ func (c *AdminController) Get() {
 	}
 	c.Data["Categories"] = categories
 
-
-	replies, err := models.GetReplies()
+/*
+	replies, err := models.GetReplies("")
 	if err != nil {
 		beego.Error(err)
 	}
-	c.Data["Replies"] = replies
+	c.Data["Replies"] = replies*/
 
 
 	c.TplName = "admin.tpl"
