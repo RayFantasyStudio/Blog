@@ -28,7 +28,6 @@ func (c *ArticleModifyController) Post() {
 	subtitle := c.Input().Get("subtitle")
 	category := c.Input().Get("category")
 	content := c.Input().Get("content")
-	beego.Info("the raw id =  ", raw_id)
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
 		beego.Error(err)

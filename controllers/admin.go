@@ -15,9 +15,7 @@ func (c *AdminController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-
 	c.Data["Articles"] = articles
-
 	categories, err := models.GetCategoryList()
 	if err != nil {
 		beego.Error(err)

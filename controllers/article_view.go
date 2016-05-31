@@ -12,7 +12,6 @@ type ArticleViewController struct {
 
 func (c *ArticleViewController) Get() {
 	raw_id := c.Input().Get("id")
-	beego.Info("the raw id =  ", raw_id)
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
 		beego.Error(err)
