@@ -24,7 +24,6 @@ func DeleteReply(Id int64) error {
 	o := orm.NewOrm()
 	reply := new(Reply)
 	var err error
-	//按照id删除（优先）
 	if Id > -1 {
 		reply.Id = Id
 		_, err = o.Delete(reply)

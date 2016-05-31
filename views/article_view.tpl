@@ -1,5 +1,6 @@
 [[template "header" .]]
 <div class="ui  container">
+
     [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
@@ -29,6 +30,7 @@
         <div class="ui raised segment">
             <div class="ui comments">
                 <h3 class="ui dividing header">Comments</h3>
+                [[$aid := .Article.Id]]
                 [[range .Replies]]
                 <div class="comment" style="padding: 0 5px 0 5px">
                     <a class="avatar">
@@ -42,6 +44,7 @@
                         <div class="text">[[.Content]]</div>
                         <div class="actions">
                             <a class="reply">回复</a>
+                            <a class="reply" href="/article/view?op=delrpy&rid=[[.Id]]&aid=[[$aid]]">删除回复</a>
                         </div>
                     </div>
                 </div>
