@@ -21,34 +21,41 @@
                 <div class="field" style="height: 400px">
                     [[.Content]]
                 </div>
+                <a class="ui  green button" href="/article/modify?id=[[.Id]]">修改</a>
+                <a class="ui red button" href="/article?op=del&id=[[.Id]]">删除</a>
             </div>
         </div>
         [[end]]
         <div class="ui raised segment">
             <div class="ui comments">
                 <h3 class="ui dividing header">Comments</h3>
-
+                [[range .Replies]]
                 <div class="comment" style="padding: 0 5px 0 5px">
                     <a class="avatar">
                         <img src="/images/avatar/small/matt.jpg">
                     </a>
                     <div class="content">
-                        <a class="author">评论的用户</a>
+                        <a class="author">[[.UserName]]</a>
                         <div class="metadata">
-                            <span class="date">评论时间</span>
+                            <span class="date">[[.Time]]</span>
                         </div>
-                        <div class="text">我是评论内容</div>
+                        <div class="text">[[.Content]]</div>
                         <div class="actions">
                             <a class="reply">回复</a>
                         </div>
                     </div>
                 </div>
+                [[end]]
 
-                <form class="ui reply form">
-                    <div class="field">
-                        <textarea></textarea>
+                <form class="ui reply form" action="/article/view" method="post">
+                    <input type="hidden" name="aid" value="[[.Article.Id]]">
+                    <div class="fields">
+                        <input type="text" name="reply_name" placeholder="请输入昵称">
                     </div>
-                    <div class="ui blue labeled submit icon button"><i class="icon edit"></i> 添加评论</div>
+                    <div class="field ">
+                        <textarea name="reply_content" placeholder="请输入评论内容"></textarea>
+                    </div>
+                    <button class="ui blue labeled submit icon button" type="submit"><i class="icon edit"></i> 添加评论</button>
                 </form>
             </div>
         </div>
