@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css" class="ui" rel="stylesheet">
     <link href="/static/css/login.css" rel="stylesheet">
-    <link href="/static/css/login.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
     <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
 </head>

@@ -10,8 +10,7 @@ type MainController struct {
 }
 
 func (c *MainController) Get() {
-	c.Data["Owner"] = "RayFantasy Studio"
-	c.Data["User"] = "访客"
+	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	var err error
 	c.Data["Articles"], err = models.GetArticleList("", "")
 	if err != nil {

@@ -278,6 +278,6 @@
 
 <!-- tabs支持 -->
 <script src="//cdn.bootcss.com/jquery.address/1.6/jquery.address.min.js"></script>
-<script src="/static/js/admin.js" type="text/javascript"></script>
+<script src="/static/js/base.js" type="text/javascript"></script>
 </body>
 </html>

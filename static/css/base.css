@@ -1,6 +1,6 @@
 
 body {
-    background-color: #FFFFFF;
+    background-color: #EEEEEE;
 }
 
 .main.container {
@@ -22,7 +22,7 @@ body {
 
 .overlay {
     float: left;
-    margin: 0em 3em 1em 0em;
+    margin: 0 3em 1em 0;
 }
 
 .overlay .menu {
@@ -34,7 +34,7 @@ body {
 .main.menu.fixed {
     background-color: #FFFFFF;
     border: 1px solid #DDD;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .overlay.fixed .menu {
@@ -50,6 +50,10 @@ body {
 }
 
 .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
+    margin: 5em 0 0;
+    padding: 5em 0;
+}
+
+.ui.borderless.main.menu {
+    background-color: #EEEEEE;
 }
