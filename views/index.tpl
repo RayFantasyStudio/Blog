@@ -13,10 +13,10 @@
                     [[$article.Content]]
                 </div>
                 <div class="extra">
-                    <div class="ui right floated primary button">
+                    <a class="ui right floated primary button" href="/article/view?id=[[$article.Id]]">
                         详情
                         <i class="right chevron icon"></i>
-                    </div>
+                    </a>
                     <div class="ui label">Tag</div>
                 </div>
             </div>
