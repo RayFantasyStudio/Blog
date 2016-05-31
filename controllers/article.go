@@ -50,8 +50,8 @@ func (c *ArticleController) Post() {
 
 }
 func (c *ArticleController) Create() {
-	c.TplName = "Add_Article.tpl"
+	c.TplName = "article_create.tpl"
 }
 func (c *ArticleController) View(){
-	c.TplName = "Article_View.tpl"
+	c.TplName = "article_view.tpl"
 }
