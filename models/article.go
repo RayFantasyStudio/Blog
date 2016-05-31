@@ -102,3 +102,10 @@ func ModifyArticle(article *Article) error {
 	}
 	return err
 }
+func DeleteArticle(id int64) error{
+	o := orm.NewOrm()
+	cate := &Article{Id : id}
+	_, err := o.Delete(cate)
+
+	return err
+}

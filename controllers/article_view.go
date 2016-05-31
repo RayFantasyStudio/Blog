@@ -11,6 +11,7 @@ type ArticleViewController struct {
 }
 
 func (c *ArticleViewController) Get() {
+	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	raw_id := c.Input().Get("id")
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {

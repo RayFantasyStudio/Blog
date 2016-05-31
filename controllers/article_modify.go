@@ -11,6 +11,7 @@ type ArticleModifyController struct {
 }
 
 func (c *ArticleModifyController) Get() {
+	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	raw_id := c.Input().Get("id")
 	beego.Info("the raw id =  ", raw_id)
 	id, err := strconv.ParseInt(raw_id, 10, 64)

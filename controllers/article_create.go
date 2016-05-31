@@ -10,6 +10,7 @@ type ArticleCreaateController struct  {
 	beego.Controller
 }
 func (c *ArticleCreaateController) Get(){
+	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	c.TplName = "article_create.tpl"
 }
 
