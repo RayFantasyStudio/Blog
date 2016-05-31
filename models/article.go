@@ -51,3 +51,19 @@ func AddAritcle(article *Article) error {
 
 	return err
 }
+func ModifyArticle(article *Article) error {
+	o := orm.NewOrm()
+	modifyArticle := &Article{
+		Id:article.Id,
+	}
+	err := o.Read(modifyArticle)
+	if err == nil {
+		modifyArticle.Category = article.Category
+		modifyArticle.Title = article.Title
+		modifyArticle.Subtitle = article.Subtitle
+		modifyArticle.Content = article.Content
+		modifyArticle.Updated = time.Now()
+	}
+	_, err = o.Update(modifyArticle)
+	return err
+}
