@@ -1,27 +1,29 @@
 [[template "header" .]]
 <div class="ui  container">
+    [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
                 <div class="ui left icon input">
-                    <span style="color: white">我是标签</span>
+                    <span style="color: white">[[.Category]]</span>
                 </div>
             </a>
             <div class="ui form">
                 <div class="field">
-                    <h1>标题在这</h1>
+                    <h1>[[.Title]]</h1>
                 </div>
                 <div class="field">
-                    <h3><span style="color: gray">副标题在这</span></h3>
+                    <h3><span style="color: gray">[[.Subtitle]]</span></h3>
                 </div>
                 <div class="ui divider"></div>
                 <div class="field">
                     <label>标签</label>标签在这
                 </div>
                 <div class="field" style="height: 400px">
-                    我是正文
+                    [[.Content]]
                 </div>
             </div>
         </div>
+        [[end]]
         <div class="ui raised segment">
             <div class="ui comments">
                 <h3 class="ui dividing header">Comments</h3>

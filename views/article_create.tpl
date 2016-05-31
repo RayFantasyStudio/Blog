@@ -8,7 +8,7 @@
                     <i class="users icon"></i>
                 </div>
             </a>
-            <form class="ui" style="width: 100% ; padding: 3%" method="post" action="/article">
+            <form class="ui" style="width: 100% ; padding: 3%" method="post" action="/article/create">
                 <div class="ui form">
                     <div class="field">
                         <label>标题</label>

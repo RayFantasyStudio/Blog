@@ -34,11 +34,13 @@ func GetArticleList(category, tag string) (articles []*Article, err error) {
 	_, err = query.All(&articles)
 	return articles, err
 }
-func GetArticle(id int64) (article *Article, err error) {
+func GetArticle(id int64) (*Article, error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
-	err = query.Filter("id", id).One(article)
+	article := new(Article)
+	err := query.Filter("id", id).One(article)
 	article.ViewCount++
+
 	return article, err
 }
 func AddAritcle(article *Article) error {
