@@ -1,6 +1,7 @@
 [[template "header" .]]
+<script src="//cdn.bootcss.com/marked/0.3.5/marked.js"></script>
+<script src="//cdn.bootcss.com/marked/0.3.5/marked.min.js"></script>
 <div class="ui  container">
-
     [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
@@ -8,7 +9,7 @@
                     <span style="color: white">[[.Category]]</span>
                 </div>
             </a>
-            <div class="ui form">
+            <div class="ui">
                 <div class="field">
                     <h1>[[.Title]]</h1>
                 </div>
@@ -19,8 +20,11 @@
                 <div class="field">
                     <label>标签</label>标签在这
                 </div>
-                <div class="field" style="height: 400px">
-                    [[.Content]]
+                <div class="field" id="markdown-content">
+                    <script>
+                        document.getElementById('markdown-content').innerHTML =
+                                marked('[[.Content]]');
+                    </script>
                 </div>
                 <a class="ui  green button" href="/article/modify?id=[[.Id]]">修改</a>
                 <a class="ui red button" href="/article?op=del&id=[[.Id]]">删除</a>
@@ -63,6 +67,5 @@
             </div>
         </div>
     </div>
-
 </div>
 [[template "footer"]]

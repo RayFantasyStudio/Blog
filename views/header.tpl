@@ -17,8 +17,6 @@
         <h1 class="ui header">[[.Owner]]的Blog</h1>
         <p>This example shows how to use lazy loaded images, a sticky menu, and a simple text container</p>
     </div>
-
-
     <div class="ui borderless main menu">
         <div class="ui text container">
             <div href="#" class="header item">
