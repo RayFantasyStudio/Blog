@@ -23,7 +23,8 @@
                 <div class="field" id="markdown-content">
                     <script>
                         document.getElementById('markdown-content').innerHTML =
-                                marked('[[.Content]]');
+                                '[[.Content]]'
+                        ;
                     </script>
                 </div>
                 <a class="ui  green button" href="/article/modify?id=[[.Id]]">修改</a>
