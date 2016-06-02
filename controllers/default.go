@@ -16,6 +16,5 @@ func (c *MainController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-
 	c.TplName = "index.tpl"
 }

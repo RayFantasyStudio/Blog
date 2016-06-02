@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego"
+	"fmt"
 )
 
 type Article struct {
@@ -43,23 +45,44 @@ func GetArticle(id int64) (*Article, error) {
 
 	return article, err
 }
-func AddAritcle(article *Article) error {
+func AddAritcle(article *Article, tagsrt []string) error {
+	beego.Info(tagsrt)
 	o := orm.NewOrm()
-	_, err := o.Insert(article)
-
+	var err error
+	//插入文章
+	o.Insert(article)
 	//添加分类
-	category := new(Category)
-	qs := o.QueryTable("category").Filter("name", article.Category)
-	err = qs.One(category)
-	if err == nil {
-		category.ArticleCount++
-		_,err = o.Update(category)
-	} else {
-		category.Name = article.Category
-		category.Created = time.Now()
-		category.ArticleCount = 1
-		o.Insert(category)
+	category := Category{Name:article.Category}
+	if created, _, err := o.ReadOrCreate(&category, "Name"); err == nil {
+		if created {
+			category.ArticleCount = 1
+		} else {
+			category.ArticleCount++
+			o.Update(&category)
+		}
 	}
+	//添加Tag
+	tags_id := make([]int64,0)
+	for _, x := range tagsrt {
+		tag := Tag{Name:x}
+		if created, tag_id, err := o.ReadOrCreate(&tag, "Name"); err == nil {
+			if created {
+				fmt.Println("New Insert an object. Id:", tag.Name)
+				tags_id = append(tags_id,tag_id)
+			} else {
+				fmt.Println("Get an object. Id:", tag.Name)
+			}
+		}
+	}
+	//处理article - tag
+	article_tmp := new(Article)
+	qs_art := o.QueryTable("article")
+	err = qs_art.Filter("Title",article.Title).One(article_tmp)
+	for _,x := range tags_id{
+		SaveArticleTag(article_tmp.Id,x)
+
+	}
+
 	return err
 }
 func ModifyArticle(article *Article) error {
@@ -102,7 +125,7 @@ func ModifyArticle(article *Article) error {
 	}
 	return err
 }
-func DeleteArticle(id int64) error{
+func DeleteArticle(id int64) error {
 	o := orm.NewOrm()
 	cate := &Article{Id : id}
 	_, err := o.Delete(cate)

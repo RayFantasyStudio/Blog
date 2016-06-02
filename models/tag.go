@@ -5,7 +5,6 @@ import "github.com/astaxie/beego/orm"
 type Tag struct {
 	Id        int64
 	Name      string
-	ArticleId int64
 }
 
 func AddTag(tag Tag) error {
