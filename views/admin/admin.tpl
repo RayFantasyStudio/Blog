@@ -50,7 +50,7 @@
         </div>
         <div class="ui tab" data-tab="reply">
             [[template "admin_reply" .]]
-            
+
         </div>
         <div class="ui tab" data-tab="user">
         </div>
