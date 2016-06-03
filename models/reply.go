@@ -37,3 +37,10 @@ func GetReplies(aid int64) ([]*Reply,error){
 	_,err :=  qs.All(&replies)
 	return replies,err
 }
+func GetAdminReplies() ([]*Reply,error){
+	o := orm.NewOrm()
+	qs := o.QueryTable("reply")
+	replies := make([]*Reply,0)
+	_,err :=  qs.All(&replies)
+	return replies,err
+}

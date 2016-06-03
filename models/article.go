@@ -23,16 +23,39 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticleList(category, tag string) (articles []*Article, err error) {
+func GetArticleList(order_key string, category, tag string) (articles []*Article, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
+	switch order_key {
+	case "Created":
+		if len(category) > 0 {
+			query = query.Filter("category", category)
+		}
+		if len(tag) > 0 {
+			query = query.Filter("tag", tag)
+		}
+		_, err = query.OrderBy("-created").All(&articles)
+		return articles, err
+	case "LastReplyTime":
+		if len(category) > 0 {
+			query = query.Filter("category", category)
+		}
+		if len(tag) > 0 {
+			query = query.Filter("tag", tag)
+		}
+		_, err = query.OrderBy("-last_reply_time").All(&articles)
+		return articles, err
+	case "ViewCount":
+		if len(category) > 0 {
+			query = query.Filter("category", category)
+		}
+		if len(tag) > 0 {
+			query = query.Filter("tag", tag)
+		}
+		_, err = query.OrderBy("-view_count").All(&articles)
+		return articles, err
+	}
 
-	if len(category) > 0 {
-		query = query.Filter("category", category)
-	}
-	if len(tag) > 0 {
-		query = query.Filter("tag", tag)
-	}
 	_, err = query.All(&articles)
 	return articles, err
 }
@@ -62,13 +85,13 @@ func AddAritcle(article *Article, tagsrt []string) error {
 		}
 	}
 	//添加Tag
-	tags_id := make([]int64,0)
+	tags_id := make([]int64, 0)
 	for _, x := range tagsrt {
 		tag := Tag{Name:x}
 		if created, tag_id, err := o.ReadOrCreate(&tag, "Name"); err == nil {
 			if created {
 				fmt.Println("New Insert an object. Id:", tag.Name)
-				tags_id = append(tags_id,tag_id)
+				tags_id = append(tags_id, tag_id)
 			} else {
 				fmt.Println("Get an object. Id:", tag.Name)
 			}
@@ -77,9 +100,9 @@ func AddAritcle(article *Article, tagsrt []string) error {
 	//处理article - tag
 	article_tmp := new(Article)
 	qs_art := o.QueryTable("article")
-	err = qs_art.Filter("Title",article.Title).One(article_tmp)
-	for _,x := range tags_id{
-		SaveArticleTag(article_tmp.Id,x)
+	err = qs_art.Filter("Title", article.Title).One(article_tmp)
+	for _, x := range tags_id {
+		SaveArticleTag(article_tmp.Id, x)
 
 	}
 

@@ -3,8 +3,8 @@ package models
 import "github.com/astaxie/beego/orm"
 
 type Tag struct {
-	Id        int64
-	Name      string
+	Id   int64
+	Name string
 }
 
 func AddTag(tag Tag) error {
@@ -32,8 +32,16 @@ func DeleteTag(Id int64, name string) error {
 func GetArticleTag(articleId int64) ([]*Tag, error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("tag")
-	qs.Filter("article_id",articleId)
-	tagList := make([]*Tag,0)
-	_,err := qs.All(&tagList)
-	return tagList,err
+	qs.Filter("article_id", articleId)
+	tagList := make([]*Tag, 0)
+	_, err := qs.All(&tagList)
+	return tagList, err
+}
+func GetTags() ([]Tag, error) {
+	o := orm.NewOrm()
+	tags := make([]Tag, 0)
+	qs := o.QueryTable("tag")
+	_, err := qs.All(&tags)
+	return tags, err
+
 }

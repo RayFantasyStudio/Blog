@@ -11,7 +11,7 @@ type AdminController  struct {
 
 func (c *AdminController) Get() {
 
-	articles, err := models.GetArticleList("", "")
+	articles, err := models.GetArticleList("", "", "")
 	if err != nil {
 		beego.Error(err)
 	}
@@ -24,13 +24,19 @@ func (c *AdminController) Get() {
 	}
 	c.Data["Categories"] = categories
 
-/*
-	replies, err := models.GetReplies("")
+	replies, err := models.GetAdminReplies()
 	if err != nil {
 		beego.Error(err)
 	}
-	c.Data["Replies"] = replies*/
+	c.Data["Replies"] = replies
 
+
+
+	tags, err := models.GetTags()
+	if err != nil {
+		beego.Error(err)
+	}
+	c.Data["Tags"] = tags
 
 	c.TplName = "admin.tpl"
 }

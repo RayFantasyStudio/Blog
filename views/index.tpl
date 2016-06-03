@@ -9,8 +9,12 @@
                     <a>[[$article.Created | SinceTime]]</a>
                     <a>Category</a>
                 </div>
-                <div class="description">
-                    [[$article.Content]]
+                <div class="description" id="description">
+                    <script>
+                        document.getElementById('description').innerHTML =
+                                '[[$article.Content]]'
+                        ;
+                    </script>
                 </div>
                 <div class="extra">
                     <a class="ui right floated primary button" href="/article/view?id=[[$article.Id]]">
