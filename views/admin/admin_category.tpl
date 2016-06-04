@@ -18,7 +18,13 @@
         <td>共有 [[.ArticleCount]] 篇文章</td>
         <td>
             <a href="/admin/category?op=delete">删除</a><br>
-            <a href="/">重命名</a>
+            <div class="ui accordion field">
+                <div class="title"><i class="icon dropdown"></i> Optional Details </div>
+                <div class="content field">
+                    <label class="transition hidden">婚前姓氏</label>
+                    <input placeholder="婚前姓氏" type="text" class="transition hidden">
+                </div>
+            </div>
         </td>
     </tr>
     [[end]]

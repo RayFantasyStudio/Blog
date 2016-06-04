@@ -44,6 +44,7 @@ func (c *ArticleModifyController) Post() {
 	if err != nil {
 		beego.Error(err)
 	}
+
 	//TODO 处理标签 处理分类
 
 	c.Redirect("/", 302)

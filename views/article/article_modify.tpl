@@ -12,6 +12,7 @@
                 </a>
                 <div class="ui" style="width: 100% ; padding: 3%">
                     <input type="hidden" value="[[.Id]]" name="id">
+                    <input type="hidden" value="[[.Category]]" name="former_category">
                     <div class="ui form">
                         <div class="field">
                             <label>标题</label>
