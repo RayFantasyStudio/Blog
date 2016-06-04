@@ -58,11 +58,11 @@ func ModifyCategory(former_category, category_name string) error {
 
 	articles := make([]Article,0)
 	qs_article := o.QueryTable("article").Filter("category",former_category)
-	_,err = qs_article.All(articles)
+	_,err = qs_article.All(&articles)
 
 	for _,x := range articles{
 		x.Category = category_name
-		_,err = o.Update(x)
+		_,err = o.Update(&x)
 	}
 	return err
 }

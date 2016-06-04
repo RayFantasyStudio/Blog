@@ -17,9 +17,13 @@
         <td>创建于:[[.Created]]</td>
         <td>共有 [[.ArticleCount]] 篇文章</td>
         <td>
-            <a href="/admin/category?op=delete">删除</a><br>
+            <form action="/admin" method="post">
+                <input type="hidden" value="category_delete" name="op">
+                <input type="hidden" value="[[.Id]]" name="delete_category_id">
+                <button class="ui red button" type="submit">删除</button>
+            </form>
             <div class="ui accordion field">
-                <div class="title"><i class="icon dropdown"></i> 重命名 </div>
+                <div class="title"><i class="icon dropdown"></i> 重命名</div>
                 <div class="content field">
                     <form class="form" action="/admin" method="post">
                         <div class="ui input">

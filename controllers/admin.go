@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
+	"strconv"
 )
 
 type AdminController  struct {
@@ -40,8 +41,9 @@ func (c *AdminController) Get() {
 }
 func (c *AdminController) Post() {
 	op := c.Input().Get("op")
+	beego.Info("op = ", op)
 	switch op {
-	case "categoty_rename":
+	case "category_rename":
 		former_category := c.Input().Get("former_category")
 		new_category := c.Input().Get("new_category")
 		if (len(former_category) > 0 && len(new_category) > 0) {
@@ -50,6 +52,15 @@ func (c *AdminController) Post() {
 				beego.Error(err)
 			}
 		}
+	case "category_delete":
+		delete_category_id, err := strconv.ParseInt(c.Input().Get("delete_category_id"), 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+		err = models.DeleteCategory(delete_category_id, "")
+		if err != nil {
+			beego.Error(err)
+		}
 	}
-	c.Redirect("/admin",302)
+	c.Redirect("/admin", 302)
 }
