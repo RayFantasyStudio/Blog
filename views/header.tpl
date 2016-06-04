@@ -21,28 +21,23 @@
     <div class="ui borderless main menu">
         <div class="ui text container">
             <div href="#" class="header item">
-                [[.User]]
+                [[if .IsLogin]]
+                [[.User.Name]]
+                [[else]]
+                访客
+                [[end]]
             </div>
             <a href="#" class="item">Blog</a>
             <a href="#" class="item">Articles</a>
-            <a href="#" class="ui right floated dropdown item" tabindex="0">
-                Dropdown <i class="dropdown icon"></i>
-                <div class="menu transition hidden" tabindex="-1">
-                    <div class="item">Link Item</div>
-                    <div class="item">Link Item</div>
-                    <div class="divider"></div>
-                    <div class="header">Header Item</div>
-                    <div class="item">
-                        <i class="dropdown icon"></i>
-                        Sub Menu
-                        <div class="menu transition hidden">
-                            <div class="item">Link Item</div>
-                            <div class="item">Link Item</div>
-                        </div>
-                    </div>
-                    <div class="item">Link Item</div>
-                </div>
+            [[if .IsLogin]]
+            <a href='[[urlfor "LoginController.Logout"]]' class="ui right item">
+                注销
             </a>
+            [[else]]
+            <a href='[[urlfor "LoginController.Get"]]' class="ui right item">
+                登陆
+            </a>
+            [[end]]
         </div>
     </div>
 </div>

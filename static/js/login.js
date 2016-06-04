@@ -27,15 +27,15 @@ $(function () {
                     ]
                 },
                 password: {
-                    identifier: 'password',
+                    identifier: 'pwd',
                     rules: [
                         {
                             type: 'empty',
                             prompt: '请输入您的密码'
                         },
                         {
-                            type: 'length[6]',
-                            prompt: '密码至少包含6个字符'
+                            type: 'length[8]',
+                            prompt: '密码至少包含{ruleValue}个字符'
                         }
                     ]
                 }

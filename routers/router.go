@@ -15,4 +15,6 @@ func init() {
 	beego.Router("/article/modify", &controllers.ArticleModifyController{})
 
 	beego.AutoRouter(&controllers.ArticleViewController{})
+
+	beego.Router("/logout", &controllers.LoginController{}, "*:Logout")
 }

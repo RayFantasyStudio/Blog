@@ -13,7 +13,7 @@ type Article struct {
 	Title           string
 	Subtitle        string
 	Content         string`orm:"size(10000)"`
-	Author          string
+	Author          *User `orm:"rel(fk)"`
 	Category        string
 	Created         time.Time `orm:"index"`
 	Updated         time.Time `orm:"index"`

@@ -21,7 +21,7 @@
                 登录你的账户
             </div>
         </h2>
-        <form class="ui large form" method="post" action="/login">
+        <form class="ui large form" method="post" action='[[urlfor "LoginController.Post"]]'>
             <div class="ui stacked segment">
                 <div class="field">
                     <div class="ui left icon input">
@@ -32,13 +32,18 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="lock icon"></i>
-                        <input type="password" name="password" placeholder="密码">
+                        <input type="password" name="pwd" placeholder="密码">
                     </div>
                 </div>
                 <div class="ui fluid large teal submit button">登录</div>
             </div>
 
             <div class="ui error message"></div>
+            [[if .Message ]]
+            <div class="ui message">
+                <p>[[.Message]]</p>
+            </div>
+            [[end]]
 
         </form>
     </div>

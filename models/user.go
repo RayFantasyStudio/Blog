@@ -4,14 +4,15 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/RayFantasyStudio/blog/utils"
 	"fmt"
+	"github.com/astaxie/beego/validation"
 )
 
 var accessToken = make(map[string]int)
 
 type User struct {
-	Id   int `json:"id"`
-	Name string `orm:"size(16);unique" form:"name" json:"name"`
-	Pwd  string `orm:"size(32)" form:"pwd" json:"_"`
+	Id   int `form:"_" json:"id"`
+	Name string `orm:"size(16);unique" form:"name" json:"name" valid:"Required"`
+	Pwd  string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)"`
 }
 
 // 新建用户
@@ -102,12 +103,15 @@ func GetUserByToken(token string) (user *User, err error) {
 }
 
 func checkUserValid(user *User) error {
-	if len(user.Name) < 3 {
-		return fmt.Errorf("user.Name参数需要最小长度为%d，实际长度为%d", 3, len(user.Name))
+	valid := validation.Validation{}
+	b, err := valid.Valid(user)
+	if err != nil {
+		return err
 	}
-
-	if len(user.Pwd) < 5 {
-		return fmt.Errorf("user.Pwd参数需要最小长度为%d，实际长度为%d", 3, len(user.Pwd))
+	if !b {
+		for _, err := range valid.Errors {
+			return fmt.Errorf("%s %s", err.Key, err.Message)
+		}
 	}
 
 	return nil
