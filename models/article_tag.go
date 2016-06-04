@@ -21,19 +21,29 @@ func SaveArticleTag(article_id, tag_id int64) error{
 	return err
 }
 
-func GetArticleAccroingTag(tag_id int64) ([]*Article, error) {
+func DeleteArticleTag(article_id, tag_id int64) error{
+	o := orm.NewOrm()
+	article_tag := ArticleTag{
+		ArticleId:article_id,
+		TagId:tag_id,
+	}
+	_,err := o.Delete(&article_tag)
+	return err
+}
+
+func GetArticleAccroingTag(tag_id int64) ([]Article, error) {
 	o := orm.NewOrm()
 	qs_tag := o.QueryTable("article_tag").Filter("tag_id", tag_id)
-	m2m_article := make([]int64, 0)
-	_, err := qs_tag.All(m2m_article)
+	m2m_article := make([]ArticleTag, 0)
+	_, err := qs_tag.All(&m2m_article)
 
 
 	qs_article := o.QueryTable("article")
-	articles := make([]*Article, 0)
+	articles := make([]Article, 0)
 	for _, x := range m2m_article {
-		qs_article.Filter("id", x)
-		article := new(Article)
-		qs_article.One(article)
+		qs_article := qs_article.Filter("id", x.ArticleId)
+		article := Article{}
+		qs_article.One(&article)
 		articles = append(articles, article)
 	}
 	return articles, err
@@ -46,15 +56,12 @@ func GetTagAccroingAritcle(article_id int64) ([]Tag, error) {
 
 
 
-	//FIXME 一下功能未实现，从tag表取出标签
-	beego.Info(m2m_tags)
+	beego.Info(m2m_tags,"len",len(m2m_tags))
 	qs_tag := o.QueryTable("tag")
-	tags := make([]Tag, 0)
-	for _, x := range m2m_tags {
-		qs_tag.Filter("id", x.TagId)
-		var tag Tag
-		qs_tag.One(&tag)
-		tags = append(tags, tag)
+	tags := make([]Tag, len(m2m_tags))
+	for c, x := range m2m_tags {
+		qs_tag := qs_tag.Filter("id", x.TagId)
+		qs_tag.One(&tags[c])
 	}
 	return tags, err
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
-	"fmt"
 )
 
 type Article struct {
@@ -96,26 +95,24 @@ func AddArticle(article Article, tagsrt []string) error {
 
 
 	//添加Tag
-	tags_id := make([]int64, 0)
+	var inexistTags []int64
 	for _, x := range tagsrt {
 		tag := Tag{Name:x}
-		if created, tag_id, err := o.ReadOrCreate(&tag, "Name"); err == nil {
-			if created {
-				fmt.Println("New Insert an object. Id:", tag.Name)
-				tags_id = append(tags_id, tag_id)
-			} else {
-				fmt.Println("Get an object. Id:", tag.Name)
-			}
+		_, _, err := o.ReadOrCreate(&tag, "Name")
+		if err != nil {
+			return err
+		} else {
+			inexistTags = append(inexistTags, tag.Id)
 		}
 	}
-	//处理article - tag
 	article_tmp := Article{}
-	qs_art := o.QueryTable("article")
-	err = qs_art.Filter("Title", article.Title).One(&article_tmp)
+	qs_art := o.QueryTable("article").Filter("title", article.Title)
+	err = qs_art.One(&article_tmp)
 	if err != nil {
 		return err
 	}
-	for _, x := range tags_id {
+
+	for _, x := range inexistTags {
 		err = SaveArticleTag(article_tmp.Id, x)
 		if err != nil {
 			return err

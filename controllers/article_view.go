@@ -28,7 +28,6 @@ func (c *ArticleViewController) Get() {
 		beego.Error(err)
 	}
 
-
 	//删除评论
 	if c.Input().Get("op") == "delrpy"{
 		raw_rid := c.Input().Get("rid")
