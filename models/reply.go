@@ -22,11 +22,11 @@ func AddReply(reply *Reply) error {
 }
 func DeleteReply(Id int64) error {
 	o := orm.NewOrm()
-	reply := new(Reply)
+	reply := Reply{}
 	var err error
 	if Id > -1 {
 		reply.Id = Id
-		_, err = o.Delete(reply)
+		_, err = o.Delete(&reply)
 	}
 	return err
 }

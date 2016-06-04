@@ -11,14 +11,14 @@ type AdminController  struct {
 
 func (c *AdminController) Get() {
 
-	articles, err := models.GetArticleList("", "", "")
+	articles, err := models.GetArticles("", "", "")
 	if err != nil {
 		beego.Error(err)
 	}
 
 	c.Data["Articles"] = articles
 
-	categories, err := models.GetCategoryList()
+	categories, err := models.GetCategories()
 	if err != nil {
 		beego.Error(err)
 	}

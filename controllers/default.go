@@ -12,7 +12,7 @@ type MainController struct {
 func (c *MainController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	var err error
-	c.Data["Articles"], err = models.GetArticleList("Created","", "")
+	c.Data["Articles"], err = models.GetArticles("Created","", "")
 	if err != nil {
 		beego.Error(err)
 	}

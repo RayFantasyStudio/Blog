@@ -14,17 +14,23 @@ func AddTag(tag Tag) error {
 }
 func DeleteTag(Id int64, name string) error {
 	o := orm.NewOrm()
-	tag := new(Tag)
+	tag := Tag{}
 	var err error
 	//按照id删除（优先）
 	if Id > -1 {
 		tag.Id = Id
-		_, err = o.Delete(tag)
+		_, err = o.Delete(&tag)
+		if err != nil {
+			return err
+		}
 	}
 	//按照名称（name）删除
 	if len(name) > 0 {
 		tag.Name = name
-		_, err = o.Delete(tag)
+		_, err = o.Delete(&tag)
+		if err != nil {
+			return err
+		}
 	}
 	return err
 }

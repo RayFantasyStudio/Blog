@@ -12,7 +12,7 @@ type Category struct {
 	ArticleCount int64`orm:"index"`
 }
 
-func GetCategoryList() ([]*Category, error) {
+func GetCategories() ([]*Category, error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category")
 	categoryList := make([]*Category, 0)
@@ -33,18 +33,24 @@ func DeleteCategory(Id int64, name string) error {
 	if Id > -1 {
 		category.Id = Id
 		_, err = o.Delete(category)
+		if err != nil {
+			return err
+		}
 	}
 	//按照名称（name）删除
 	if len(name) > 0 {
 		category.Name = name
 		_, err = o.Delete(name)
+		if err != nil {
+			return err
+		}
 	}
 	return err
 }
 func ModifyCategory(former_category, category_name string) error {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category").Filter("name",former_category)
-	category_tmp := new(Category)
+	category_tmp := Category{}
 	err := qs.One(&category_tmp)
 	category_tmp.Name = category_name
 	category_tmp.Created = time.Now()

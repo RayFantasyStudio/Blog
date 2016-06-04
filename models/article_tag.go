@@ -13,9 +13,10 @@ type ArticleTag  struct {
 
 func SaveArticleTag(article_id, tag_id int64) error{
 	o := orm.NewOrm()
-	article_tag := new(ArticleTag)
-	article_tag.ArticleId = article_id
-	article_tag.TagId = tag_id
+	article_tag := ArticleTag{
+		ArticleId:article_id,
+		TagId:tag_id,
+	}
 	_,err := o.Insert(&article_tag)
 	return err
 }

@@ -23,7 +23,7 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticleList(order_key string, category, tag string) (articles []*Article, err error) {
+func GetArticles(order_key string, category, tag string) (articles []*Article, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
 	switch order_key {
@@ -62,21 +62,21 @@ func GetArticleList(order_key string, category, tag string) (articles []*Article
 func GetArticle(id int64) (*Article, error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
-	article := new(Article)
-	err := query.Filter("id", id).One(article)
+	article := Article{}
+	err := query.Filter("id", id).One(&article)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	article.ViewCount++
-	_,err = o.Update(&article)
-	return article, err
+	o.Update(&article)
+	return &article, err
 }
-func AddArticle(article *Article, tagsrt []string) error {
+func AddArticle(article Article, tagsrt []string) error {
 	beego.Info(tagsrt)
 	o := orm.NewOrm()
 	var err error
 	//插入文章
-	_,err = o.Insert(article)
+	_, err = o.Insert(&article)
 	if err != nil {
 		return err
 	}
@@ -87,11 +87,14 @@ func AddArticle(article *Article, tagsrt []string) error {
 			category.ArticleCount = 1
 		} else {
 			category.ArticleCount++
-			o.Update(&category)
+			_, err = o.Update(&category)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	
+
 	//添加Tag
 	tags_id := make([]int64, 0)
 	for _, x := range tagsrt {
@@ -106,22 +109,27 @@ func AddArticle(article *Article, tagsrt []string) error {
 		}
 	}
 	//处理article - tag
-	article_tmp := new(Article)
+	article_tmp := Article{}
 	qs_art := o.QueryTable("article")
-	err = qs_art.Filter("Title", article.Title).One(article_tmp)
+	err = qs_art.Filter("Title", article.Title).One(&article_tmp)
+	if err != nil {
+		return err
+	}
 	for _, x := range tags_id {
-		SaveArticleTag(article_tmp.Id, x)
-
+		err = SaveArticleTag(article_tmp.Id, x)
+		if err != nil {
+			return err
+		}
 	}
 
 	return err
 }
 func ModifyArticle(article *Article) error {
 	o := orm.NewOrm()
-	modifyArticle := &Article{
+	modifyArticle := Article{
 		Id:article.Id,
 	}
-	err := o.Read(modifyArticle)
+	err := o.Read(&modifyArticle)
 	formerCategory := modifyArticle.Category
 	if err == nil {
 		modifyArticle.Category = article.Category
@@ -130,19 +138,22 @@ func ModifyArticle(article *Article) error {
 		modifyArticle.Content = article.Content
 		modifyArticle.Updated = time.Now()
 	}
-	_, err = o.Update(modifyArticle)
+	_, err = o.Update(&modifyArticle)
+	if err != nil {
+		return err
+	}
 
 	//处理分类
 	qs := o.QueryTable("category")
-	category := new(Category)
+	category := Category{}
 	if len(formerCategory) > 0 {
-		err = qs.Filter("name", formerCategory).One(category)
+		err = qs.Filter("name", formerCategory).One(&category)
 		if err == nil {
 			category.ArticleCount--
-			_, err = o.Update(category)
+			_, err = o.Update(&category)
 		}
 	}
-	err = qs.Filter("name", article.Category).One(category)
+	err = qs.Filter("name", article.Category).One(&category)
 	if err == nil {
 		category.ArticleCount++
 		o.Update(category)
@@ -151,15 +162,14 @@ func ModifyArticle(article *Article) error {
 			category.Name = article.Category
 			category.Created = time.Now()
 			category.ArticleCount++
-			o.Insert(category)
+			o.Insert(&category)
 		}
 	}
 	return err
 }
 func DeleteArticle(id int64) error {
 	o := orm.NewOrm()
-	cate := &Article{Id : id}
-	_, err := o.Delete(cate)
-
+	cate := Article{Id : id}
+	_, err := o.Delete(&cate)
 	return err
 }
