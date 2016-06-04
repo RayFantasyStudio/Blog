@@ -40,6 +40,7 @@ func (c *ArticleCreaateController) Post() {
 	raw_tags := c.Input().Get("tags")
 	tagstr := strings.Split(raw_tags, " ")
 	err = models.AddArticle(article, tagstr)
+
 	if err != nil {
 		beego.Error(err)
 	}

@@ -42,7 +42,7 @@
         </div>
     </div>
 </div>
-<table class="ui striped compact table">
+<table class="ui striped fixed compact table">
     <thead>
     <tr>
         <th>标题</th>

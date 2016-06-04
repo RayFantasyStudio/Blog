@@ -12,29 +12,6 @@ func AddTag(tag Tag) error {
 	_, err := o.Insert(tag)
 	return err
 }
-func DeleteTag(Id int64, name string) error {
-	o := orm.NewOrm()
-	tag := Tag{}
-	var err error
-	//按照id删除（优先）
-	if Id > -1 {
-		tag.Id = Id
-		_, err = o.Delete(&tag)
-		if err != nil {
-			return err
-		}
-	}
-	//按照名称（name）删除
-	if len(name) > 0 {
-		tag.Name = name
-		_, err = o.Delete(&tag)
-		if err != nil {
-			return err
-		}
-	}
-	return err
-}
-
 func GetArticleTag(articleId int64) ([]*Tag, error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("tag")
@@ -50,4 +27,41 @@ func GetTags() ([]Tag, error) {
 	_, err := qs.All(&tags)
 	return tags, err
 
+}
+func RenameTag(tagId int64,tagName string) error{
+	o := orm.NewOrm()
+	qs := o.QueryTable("tag").Filter("id",tagId)
+	tag := Tag{}
+	err := qs.One(&tag)
+	if err != nil {
+		return err
+	}
+	tag.Name = tagName
+	_,err = o.Update(&tag)
+	return err
+}
+func DeleteTag(tagId int64) error{
+	var err error
+	o := orm.NewOrm()
+	tag := Tag{
+		Id:tagId,
+	}
+	_,err = o.Delete(&tag)
+	if err != nil {
+		return err
+	}
+
+	article_tags := make([]*ArticleTag,0)
+	qs := o.QueryTable("article_tag").Filter("tag_id",tagId)
+	_,err = qs.All(&article_tags)
+	if err != nil {
+		return err
+	}
+	for _,x := range article_tags{
+		o.Delete(x)
+		if err != nil {
+			return err
+		}
+	}
+	return err
 }

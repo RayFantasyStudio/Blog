@@ -52,6 +52,7 @@ func (c *AdminController) Post() {
 				beego.Error(err)
 			}
 		}
+		c.Redirect("/admin#/category", 302)
 	case "category_delete":
 		delete_category_id, err := strconv.ParseInt(c.Input().Get("delete_category_id"), 10, 64)
 		if err != nil {
@@ -61,6 +62,31 @@ func (c *AdminController) Post() {
 		if err != nil {
 			beego.Error(err)
 		}
+		c.Redirect("/admin#/category", 302)
+	case "tag_rename":
+		rename_tag_id, err := strconv.ParseInt(c.Input().Get("rename_tag_id"), 10, 64)
+		rename_tag_name := c.Input().Get("rename_tag_name")
+		beego.Info("rename tag id = ", rename_tag_id)
+		if err != nil {
+			beego.Error(err)
+		}
+		if ( len(rename_tag_name) > 0) {
+			err := models.RenameTag(rename_tag_id,rename_tag_name)
+			if err != nil {
+				beego.Error(err)
+			}
+		}
+		c.Redirect("/admin#/tag", 302)
+	case "tag_delete":
+		delete_tag_id, err := strconv.ParseInt(c.Input().Get("delete_tag_id"), 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+		err = models.DeleteTag(delete_tag_id)
+		if err != nil {
+			beego.Error(err)
+		}
+		c.Redirect("/admin#/tag", 302)
 	}
 	c.Redirect("/admin", 302)
 }
