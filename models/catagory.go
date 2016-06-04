@@ -19,9 +19,10 @@ func GetCategoryList() ([]*Category, error) {
 	_, err := qs.All(&categoryList)
 	return categoryList, err
 }
-func AddCagegory(category Category) error {
+func AddCategory(category Category) error {
 	o := orm.NewOrm()
-	_, err := o.Insert(category)
+	category.Created = time.Now()
+	_, err := o.Insert(&category)
 	return err
 }
 func DeleteCategory(Id int64, name string) error {
@@ -51,11 +52,11 @@ func ModifyCategory(former_category, category_name string) error {
 
 	articles := make([]Article,0)
 	qs_article := o.QueryTable("article").Filter("category",former_category)
-	err = qs_article.All(articles)
+	_,err = qs_article.All(articles)
 
 	for _,x := range articles{
 		x.Category = category_name
-		err = o.Update(x)
+		_,err = o.Update(x)
 	}
 	return err
 }

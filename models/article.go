@@ -64,16 +64,22 @@ func GetArticle(id int64) (*Article, error) {
 	query := o.QueryTable("article")
 	article := new(Article)
 	err := query.Filter("id", id).One(article)
+	if err != nil {
+		return nil,err
+	}
 	article.ViewCount++
-
+	_,err = o.Update(&article)
 	return article, err
 }
-func AddAritcle(article *Article, tagsrt []string) error {
+func AddArticle(article *Article, tagsrt []string) error {
 	beego.Info(tagsrt)
 	o := orm.NewOrm()
 	var err error
 	//插入文章
-	o.Insert(article)
+	_,err = o.Insert(article)
+	if err != nil {
+		return err
+	}
 	//添加分类
 	category := Category{Name:article.Category}
 	if created, _, err := o.ReadOrCreate(&category, "Name"); err == nil {
@@ -84,6 +90,8 @@ func AddAritcle(article *Article, tagsrt []string) error {
 			o.Update(&category)
 		}
 	}
+
+	
 	//添加Tag
 	tags_id := make([]int64, 0)
 	for _, x := range tagsrt {

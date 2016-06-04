@@ -7,16 +7,16 @@ import (
 	"strings"
 )
 
-type ArticleCreaateController struct  {
+type ArticleCreaateController struct {
 	beego.Controller
 }
-func (c *ArticleCreaateController) Get(){
+
+func (c *ArticleCreaateController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	c.TplName = "article_create.tpl"
 }
 
-
-func (c *ArticleCreaateController) Post(){
+func (c *ArticleCreaateController) Post() {
 	title := c.Input().Get("title")
 	subtitle := c.Input().Get("subtitle")
 	category := c.Input().Get("category")
@@ -30,9 +30,16 @@ func (c *ArticleCreaateController) Post(){
 		Created:time.Now(),
 		LastReplyTime:time.Now(),
 	}
+	new_category := models.Category{
+		Name:article.Category,
+	}
+	err := models.AddCategory(new_category)
+	if err != nil {
+		beego.Error(err)
+	}
 	raw_tags := c.Input().Get("tags")
-	tagstr := strings.Split(raw_tags," ")
-	err := models.AddAritcle(&article,tagstr)
+	tagstr := strings.Split(raw_tags, " ")
+	err = models.AddArticle(&article, tagstr)
 	if err != nil {
 		beego.Error(err)
 	}

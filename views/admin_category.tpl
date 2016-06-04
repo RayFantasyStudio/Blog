@@ -1,5 +1,5 @@
 [[define "admin_category"]]
-<table class="ui celled table">
+<table class="ui striped fixed compact table">
     <thead>
     <tr>
         <th>Id</th>
@@ -19,10 +19,16 @@
         <td>
             <a href="/admin/category?op=delete">删除</a><br>
             <div class="ui accordion field">
-                <div class="title"><i class="icon dropdown"></i> Optional Details </div>
+                <div class="title"><i class="icon dropdown"></i> 重命名 </div>
                 <div class="content field">
-                    <label class="transition hidden">婚前姓氏</label>
-                    <input placeholder="婚前姓氏" type="text" class="transition hidden">
+                    <form class="form" action="/admin" method="post">
+                        <div class="ui input">
+                            <input type="text" placeholder="输入新名称" name="new_category">
+                            <input type="hidden" value="[[.Name]]" name="former_category">
+                            <input type="hidden" value="category_rename" name="op">
+                        </div>
+                        <button type="submit" class="ui green button">修改</button>
+                    </form>
                 </div>
             </div>
         </td>

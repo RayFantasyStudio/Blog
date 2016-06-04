@@ -42,7 +42,7 @@
         </div>
     </div>
 </div>
-<table class="ui celled table">
+<table class="ui striped compact table">
     <thead>
     <tr>
         <th>标题</th>
@@ -58,6 +58,7 @@
     <tr>
         <td>[[.Title]]</td>
         <td>[[.Subtitle]]</td>
+        <td>Tag</td>
         <td>创建于:[[.Created]]<br>
             更新于:[[.Updated]]
         </td>
