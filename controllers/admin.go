@@ -6,13 +6,21 @@ import (
 	"strconv"
 )
 
+//admin操作op
+const (
+	category_rename = "category_rename"
+	category_delete = "category_delete"
+	tag_rename = "tag_rename"
+	tag_delete = "tag_delete"
+
+)
 type AdminController  struct {
 	beego.Controller
 }
 
 func (c *AdminController) Get() {
 
-	articles, err := models.GetArticles("", "", "")
+	articles, err := models.GetArticles(models.Filter_Create, "", "",true)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -43,7 +51,7 @@ func (c *AdminController) Post() {
 	op := c.Input().Get("op")
 	beego.Info("op = ", op)
 	switch op {
-	case "category_rename":
+	case category_rename:
 		former_category := c.Input().Get("former_category")
 		new_category := c.Input().Get("new_category")
 		if (len(former_category) > 0 && len(new_category) > 0) {
@@ -53,7 +61,7 @@ func (c *AdminController) Post() {
 			}
 		}
 		c.Redirect("/admin#/category", 302)
-	case "category_delete":
+	case category_delete:
 		delete_category_id, err := strconv.ParseInt(c.Input().Get("delete_category_id"), 10, 64)
 		if err != nil {
 			beego.Error(err)
@@ -63,7 +71,7 @@ func (c *AdminController) Post() {
 			beego.Error(err)
 		}
 		c.Redirect("/admin#/category", 302)
-	case "tag_rename":
+	case tag_rename:
 		rename_tag_id, err := strconv.ParseInt(c.Input().Get("rename_tag_id"), 10, 64)
 		rename_tag_name := c.Input().Get("rename_tag_name")
 		beego.Info("rename tag id = ", rename_tag_id)
@@ -77,7 +85,7 @@ func (c *AdminController) Post() {
 			}
 		}
 		c.Redirect("/admin#/tag", 302)
-	case "tag_delete":
+	case tag_delete:
 		delete_tag_id, err := strconv.ParseInt(c.Input().Get("delete_tag_id"), 10, 64)
 		if err != nil {
 			beego.Error(err)

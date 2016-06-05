@@ -1,4 +1,39 @@
 [[define "admin_category"]]
+<div class="ui card" id="filter-card">
+    <div class="ui accordion field">
+        <div class="title active"><i class="icon dropdown"></i> 过滤器</div>
+        <form class="content field" id="filter-container">
+            <div class="ui divider"></div>
+            <div class="ui grid">
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="category_order_create" checked="" tabindex="0" class="hidden">
+                        <label>按照创建日期升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="category_order_create" checked="" tabindex="0" class="hidden">
+                        <label>按照创建日期降序</label>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="category_order_article_count" checked="" tabindex="0" class="hidden">
+                        <label>按照文章数升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="category_order_article_count" checked="" tabindex="0" class="hidden">
+                        <label>按照文章数降序</label>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div style="margin-bottom: 70px">
+                <button class="ui red right floated button">重置</button>
+                <button class="ui green right floated button">确认</button>
+            </div>
+        </form>
+    </div>
+</div>
 <table class="ui striped fixed compact table">
     <thead>
     <tr>

@@ -1,6 +1,7 @@
 [[template "header" .]]
 
 <div class="ui  container">
+    [[$tags := .Tags]]
     [[with .Article]]
     <div class="ui relaxed divided items">
         <form method="post" action="/article/modify">
@@ -26,7 +27,8 @@
                             <label>标签</label>
                         </div>
                         <div class="field">
-                            <input type="text" name="tags" placeholder="输入标签（空格分割）">
+                            <input type="text" name="tags" value="[[$tags]]">
+                            <input type="hidden" name="former_tags" value="[[$tags]]">
                         </div>
 
                         <div class="field">

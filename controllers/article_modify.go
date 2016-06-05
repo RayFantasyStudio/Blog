@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
 	"strconv"
+	"strings"
 )
 
 type ArticleModifyController struct {
@@ -20,15 +21,29 @@ func (c *ArticleModifyController) Get() {
 	}
 	article, err := models.GetArticle(id)
 	c.Data["Article"] = article
+
+	tags,err := models.GetTagAccroingAritcle(id)
+	var tag_string []string
+	for _,x := range tags{
+		tag_string = append(tag_string,x.Name)
+	}
+	tag_str := strings.Join(tag_string," ")
+	c.Data["Tags"] = tag_str
 	c.TplName = "article_modify.tpl"
 }
 
 func (c *ArticleModifyController) Post() {
+	eUser,err := models.GetUserFromContext(c.Ctx)
+	if err != nil {
+		beego.Error(err)
+	}
 	raw_id := c.Input().Get("id")
 	title := c.Input().Get("title")
 	subtitle := c.Input().Get("subtitle")
 	category := c.Input().Get("category")
 	content := c.Input().Get("content")
+	former_tags := c.Input().Get("former_tags")
+	tags := c.Input().Get("tags")
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
 		beego.Error(err)
@@ -39,8 +54,9 @@ func (c *ArticleModifyController) Post() {
 		Subtitle:subtitle,
 		Category:category,
 		Content:content,
+		Author:eUser,
 	}
-	err = models.ModifyArticle(&article)
+	err = models.ModifyArticle(&article,former_tags,tags)
 	if err != nil {
 		beego.Error(err)
 	}

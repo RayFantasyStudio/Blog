@@ -5,6 +5,14 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
+	"strings"
+)
+//文章字段过滤器
+const (
+	Filter_Create = "created"
+	Filter_Update = "update"
+	Filter_ViewCount = "view_count"
+	Filter_LastReplyTime = "last_reply_time"
 )
 
 type Article struct {
@@ -12,7 +20,7 @@ type Article struct {
 	Title           string
 	Subtitle        string
 	Content         string`orm:"size(10000)"`
-	Author          *User `orm:"rel(fk)"`
+	Author          *User`orm:"rel(fk)"`
 	Category        string
 	Created         time.Time `orm:"index"`
 	Updated         time.Time `orm:"index"`
@@ -22,39 +30,63 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticles(order_key string, category, tag string) (articles []*Article, err error) {
+func GetArticles(order_key string, category, tag string, inverted bool) (articles []*Article, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
 	switch order_key {
-	case "Created":
+	case Filter_Create:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
 		}
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
 		}
-		_, err = query.OrderBy("-created").All(&articles)
+		if inverted {
+			_, err = query.OrderBy("-" + Filter_Create).All(&articles)
+		} else {
+			_, err = query.OrderBy(Filter_Create).All(&articles)
+		}
 		return articles, err
-	case "LastReplyTime":
+	case Filter_LastReplyTime:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
 		}
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
 		}
-		_, err = query.OrderBy("-last_reply_time").All(&articles)
+		if inverted {
+			_, err = query.OrderBy("-" + Filter_LastReplyTime).All(&articles)
+		} else {
+			_, err = query.OrderBy(Filter_LastReplyTime).All(&articles)
+		}
 		return articles, err
-	case "ViewCount":
+	case Filter_ViewCount:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
 		}
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
 		}
-		_, err = query.OrderBy("-view_count").All(&articles)
+		if inverted {
+			_, err = query.OrderBy("-" + Filter_ViewCount).All(&articles)
+		} else {
+			_, err = query.OrderBy(Filter_ViewCount).All(&articles)
+		}
+		return articles, err
+	case Filter_Update:
+		if len(category) > 0 {
+			query = query.Filter("category", category)
+		}
+		if len(tag) > 0 {
+			query = query.Filter("tag", tag)
+		}
+		if inverted {
+			_, err = query.OrderBy("-" + Filter_Update).All(&articles)
+		} else {
+			_, err = query.OrderBy(Filter_Update).All(&articles)
+		}
 		return articles, err
 	}
-
 	_, err = query.All(&articles)
 	return articles, err
 }
@@ -121,7 +153,7 @@ func AddArticle(article Article, tagsrt []string) error {
 
 	return err
 }
-func ModifyArticle(article *Article) error {
+func ModifyArticle(article *Article, raw_former_tag string, raw_tags string) error {
 	o := orm.NewOrm()
 	modifyArticle := Article{
 		Id:article.Id,
@@ -133,6 +165,7 @@ func ModifyArticle(article *Article) error {
 		modifyArticle.Title = article.Title
 		modifyArticle.Subtitle = article.Subtitle
 		modifyArticle.Content = article.Content
+		modifyArticle.Author = article.Author
 		modifyArticle.Updated = time.Now()
 	}
 	_, err = o.Update(&modifyArticle)
@@ -153,7 +186,7 @@ func ModifyArticle(article *Article) error {
 	err = qs.Filter("name", article.Category).One(&category)
 	if err == nil {
 		category.ArticleCount++
-		o.Update(category)
+		o.Update(&category)
 	} else {
 		if len(article.Category) > 0 {
 			category.Name = article.Category
@@ -162,6 +195,40 @@ func ModifyArticle(article *Article) error {
 			o.Insert(&category)
 		}
 	}
+
+	//FIXME 标签处理仍存在问题
+	//处理标签
+	former_tag := strings.Split(raw_former_tag, " ")
+	tags := strings.Split(raw_tags, " ")
+	var deleted_tag, created_tag []string
+	var flag bool = false
+	for x, _ := range former_tag {
+		for y, _ := range tags {
+			if former_tag[x] == tags[y] {
+				flag = true
+				break
+			}
+		}
+		if !flag {
+			deleted_tag = append(deleted_tag, former_tag[x])
+			flag = false
+		}
+	}
+
+	for _, x := range tags {
+		for a, y := range former_tag {
+			if y == x {
+				break
+			}
+			if a == len(tags) && y != x {
+				deleted_tag = append(created_tag, x)
+			}
+		}
+	}
+	beego.Info("the create list of ", created_tag)
+	beego.Info("the delete list of ", deleted_tag)
+	beego.Info("the raw create list of ", former_tag)
+	beego.Info("the raw delete list of ", tags)
 	return err
 }
 func DeleteArticle(id int64) error {

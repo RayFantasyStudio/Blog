@@ -15,7 +15,6 @@
                                 '[[$article.Content]]'
                         ;
                     </script>
-
                 </div>
                 <div class="extra">
                     <a class="ui right floated primary button" href="/article/view?id=[[$article.Id]]">

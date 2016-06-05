@@ -27,9 +27,16 @@ func (c *ArticleViewController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	//加载Tag
+	tags, err := models.GetTagAccroingAritcle(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	c.Data["Tags"] = tags
+
 
 	//删除评论
-	if c.Input().Get("op") == "delrpy"{
+	if c.Input().Get("op") == "delrpy" {
 		raw_rid := c.Input().Get("rid")
 		raw_aid := c.Input().Get("aid")
 		rid, err := strconv.ParseInt(raw_rid, 10, 64)
@@ -40,7 +47,7 @@ func (c *ArticleViewController) Get() {
 		if err != nil {
 			beego.Error(err)
 		}
-		c.Redirect("/article/view?id="+raw_aid,302)
+		c.Redirect("/article/view?id=" + raw_aid, 302)
 	}
 	c.TplName = "article_view.tpl"
 }
@@ -59,5 +66,5 @@ func (c *ArticleViewController) Post() {
 		Time:time.Now(),
 	}
 	err = models.AddReply(&reply)
-	c.Redirect("/article/view?id="+raw_aid,302)
+	c.Redirect("/article/view?id=" + raw_aid, 302)
 }

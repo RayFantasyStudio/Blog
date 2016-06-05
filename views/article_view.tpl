@@ -2,6 +2,7 @@
 <script src="//cdn.bootcss.com/marked/0.3.5/marked.js"></script>
 <script src="//cdn.bootcss.com/marked/0.3.5/marked.min.js"></script>
 <div class="ui  container">
+    [[$tags := .Tags]]
     [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
@@ -18,7 +19,7 @@
                 </div>
                 <div class="ui divider"></div>
                 <div class="field">
-                    <label>标签</label>标签在这
+                    <label class="ui green label">标签</label>[[range $tags]]<label class="ui label">[[.Name]]</label>[[end]]
                 </div>
                 <div class="field" id="markdown-content">
                     <script>

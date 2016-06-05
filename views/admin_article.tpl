@@ -2,44 +2,77 @@
 <div class="ui card" id="filter-card">
     <div class="ui accordion field">
         <div class="title active"><i class="icon dropdown"></i> 过滤器</div>
-        <div class="content field" id="filter-container">
+        <form class="content field" id="filter-container">
             <div class="ui divider"></div>
-            <div class="ui floating dropdown labeled icon button">
-                <i class="filter icon"></i>
-                <span class="text">分类过滤器</span>
-                <div class="menu">
-                    <div class="ui icon search input">
-                        <i class="search icon"></i>
-                        <input type="text" placeholder="搜索分类">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                        <i class="tags icon"></i>
-                        分类
-                    </div>
-                    <div class="scrolling menu">
-                        <div class="item">
-                            <div class="ui red empty circular label"></div>
-                            全部
-                        </div>
+            <div class="ui grid">
+                <div class="four wide column">
+                    <label class="label">文章分类：</label>
+                    <select class="ui search selection dropdown" id="search-select">
+                        <option value="All">All</option>
                         [[range .Categories]]
-                        <div class="item">
-                            <div class="ui red empty circular label"></div>
-                            [[.Name]]
-                        </div>
+                        <option value="[[.Name]]">[[.Name]]</option>
                         [[end]]
+                    </select>
+                </div>
+                <div class="twelve wide column">
+                    <div class="label">文章标签：</div>
+                    <select class="ui search selection dropdown" multiple="">
+                        <option value="">全部</option>
+                        [[range .Tags]]
+                        <option value="[[.Name]]">[[.Name]]</option>
+                        [[end]]
+                    </select>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui grid">
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_create" checked="" tabindex="0" class="hidden">
+                        <label>按照创建日期升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_create" checked="" tabindex="0" class="hidden">
+                        <label>按照创建日期降序</label>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_update" checked="" tabindex="0" class="hidden">
+                        <label>按照更新日期升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_update" checked="" tabindex="0" class="hidden">
+                        <label>按照更新日期降序</label>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_last_reply_time" checked="" tabindex="0" class="hidden">
+                        <label>按照最后回复升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_last_reply_time" checked="" tabindex="0" class="hidden">
+                        <label>按照最后回复降序</label>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_view_count" checked="" tabindex="0" class="hidden">
+                        <label>按照查看数升序</label>
+                    </div>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="order_view_count" checked="" tabindex="0" class="hidden">
+                        <label>按照查看数降序</label>
                     </div>
                 </div>
             </div>
-            <br>
-            <label>标签过滤</label>
-            <select class="ui fluid search dropdown" multiple="">
-                <option value="">全部</option>
-                <option value="AL">Alabama</option>
-            </select>
-
-
-        </div>
+            <div class="ui divider"></div>
+            <div style="margin-bottom: 70px">
+                <button class="ui red right floated button">重置</button>
+                <button class="ui green right floated button">确认</button>
+            </div>
+        </form>
     </div>
 </div>
 <table class="ui striped fixed compact table">
