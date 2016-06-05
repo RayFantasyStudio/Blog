@@ -11,17 +11,18 @@ func init() {
 	owner = beego.AppConfig.String("owner")
 }
 
-func initHeaderFooterData(c *beego.Controller, title string) {
+func initHeaderFooterData(c *beego.Controller, title string) (user *models.User, err error) {
 	c.Data["Owner"] = owner
-
-	// TODO: 实现登陆状态检查
-	c.Data["User"] = "访客"
 
 	c.Data["Title"] = title
 
-	token := c.Ctx.GetCookie("token")
-	user, err := models.GetUserByToken(token)
-	c.Data["User"] = user
-	c.Data["IsLogin"] = err == nil || user != nil
-
+	if token := c.Ctx.GetCookie("token"); len(token) != 0 {
+		if user, err = models.GetUserByToken(token); err != nil {
+			beego.Error(err)
+		} else {
+			c.Data["IsLogin"] = user != nil
+			c.Data["User"] = user
+		}
+	}
+	return
 }

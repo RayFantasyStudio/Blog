@@ -5,6 +5,7 @@ import (
 	"github.com/RayFantasyStudio/blog/utils"
 	"fmt"
 	"github.com/astaxie/beego/validation"
+	"github.com/astaxie/beego/context"
 )
 
 var accessToken = make(map[string]int)
@@ -62,6 +63,12 @@ func (u *User) Login() (token string, err error) {
 	return
 }
 
+// 从仅有Id的User中读出Name, Pwd
+func (u *User) ReadById() error {
+	o := orm.NewOrm()
+	return o.Read(u)
+}
+
 // 生成用作Token的随机串
 func generateToken() string {
 	token := utils.GetRandomString(16)
@@ -84,21 +91,46 @@ func GetUidByToken(token string) (uid int, err error) {
 	return
 }
 
+// 根据Token获取一个仅有Id的User
+func GetEmptyUserByToken(token string) (eUser *User, err error) {
+	var uid int
+	if uid, err = GetUidByToken(token); err != nil {
+		return
+	}
+
+	eUser = &User{Id:uid}
+	return
+}
+
 // 根据Token取得User
 func GetUserByToken(token string) (user *User, err error) {
-	o := orm.NewOrm()
-
-	var uid int
-	uid, err = GetUidByToken(token)
+	user, err = GetEmptyUserByToken(token)
 	if err != nil {
 		return
 	}
 
-	user = &User{Id:uid}
-	if err = o.Read(user); err != nil {
+	if err = user.ReadById(); err != nil {
 		return
 	}
 
+	return
+}
+
+func GetEmptyUserFromContext(ctx *context.Context) (eUser *User, err error) {
+	token := ctx.GetCookie("token")
+	eUser, err = GetEmptyUserByToken(token)
+	return
+}
+
+func GetUserFromContext(ctx *context.Context) (user *User, err error) {
+	token := ctx.GetCookie("token")
+	user, err = GetUserByToken(token)
+	return
+}
+
+func GetUidFromContext(ctx *context.Context) (uid int, err error) {
+	token := ctx.GetCookie("token")
+	uid, err = GetUidByToken(token)
 	return
 }
 
