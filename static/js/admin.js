@@ -12,3 +12,6 @@ $('.ui.accordion')
 $('.ui.radio.checkbox')
     .checkbox()
 ;
+var tag_value;
+tag_value = $('#tag_selector').dropdown('get value');
+$('#tag_js_value').value = tag_value;

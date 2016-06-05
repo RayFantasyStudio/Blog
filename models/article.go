@@ -10,7 +10,7 @@ import (
 //文章字段过滤器
 const (
 	Filter_Create = "created"
-	Filter_Update = "update"
+	Filter_Update = "updated"
 	Filter_ViewCount = "view_count"
 	Filter_LastReplyTime = "last_reply_time"
 )

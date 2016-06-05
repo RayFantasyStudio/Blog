@@ -2,12 +2,14 @@
 <div class="ui card" id="filter-card">
     <div class="ui accordion field">
         <div class="title active"><i class="icon dropdown"></i> 过滤器</div>
-        <form class="content field" id="filter-container">
+        <form class="content field" id="filter-container" action="/admin" method="post">
+            <input type="hidden" name="op" value="article_filter">
             <div class="ui divider"></div>
             <div class="ui grid">
                 <div class="four wide column">
                     <label class="label">文章分类：</label>
-                    <select class="ui search selection dropdown" id="search-select">
+                    <input type="hidden" id="tag_js_value" name="tag_value">
+                    <select class="ui search selection dropdown" id="search-select" name="article_category_filter">
                         <option value="All">All</option>
                         [[range .Categories]]
                         <option value="[[.Name]]">[[.Name]]</option>
@@ -16,7 +18,7 @@
                 </div>
                 <div class="twelve wide column">
                     <div class="label">文章标签：</div>
-                    <select class="ui search selection dropdown" multiple="">
+                    <select class="ui search selection dropdown" multiple="" name="article_tag_filter" id="tag_selector">
                         <option value="">全部</option>
                         [[range .Tags]]
                         <option value="[[.Name]]">[[.Name]]</option>
@@ -28,49 +30,49 @@
             <div class="ui grid">
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_create" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order" checked="" tabindex="0" class="hidden" value="create_ascending">
                         <label>按照创建日期升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_create" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order"  tabindex="0" class="hidden" value="create_descending">
                         <label>按照创建日期降序</label>
                     </div>
                 </div>
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_update" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order"  tabindex="0" class="hidden" value="update_ascending">
                         <label>按照更新日期升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_update" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="update_descending">
                         <label>按照更新日期降序</label>
                     </div>
                 </div>
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_last_reply_time" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="last_reply_time_ascending">
                         <label>按照最后回复升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_last_reply_time" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order"  tabindex="0" class="hidden" value="last_reply_time_descending">
                         <label>按照最后回复降序</label>
                     </div>
                 </div>
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_view_count" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order"  tabindex="0" class="hidden" value="view_count_ascending">
                         <label>按照查看数升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order_view_count" checked="" tabindex="0" class="hidden">
+                        <input type="radio" name="order"  tabindex="0" class="hidden" value="view_count_descending">
                         <label>按照查看数降序</label>
                     </div>
                 </div>
             </div>
             <div class="ui divider"></div>
             <div style="margin-bottom: 70px">
-                <button class="ui red right floated button">重置</button>
-                <button class="ui green right floated button">确认</button>
+                <button class="ui red right floated button" type="reset">重置</button>
+                <button class="ui green right floated button" type="submit">确认</button>
             </div>
         </form>
     </div>
