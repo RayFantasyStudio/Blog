@@ -11,12 +11,30 @@ type Category struct {
 	Created      time.Time`orm:"index"`
 	ArticleCount int64`orm:"index"`
 }
-
-func GetCategories() ([]*Category, error) {
+//分类字段过滤器
+const (
+	Filter_Category_Create = "created"
+	Filter_Category_ArticleCount = "article_count"
+)
+func GetCategories(order_key string,inverted bool) ([]*Category, error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category")
 	categoryList := make([]*Category, 0)
-	_, err := qs.All(&categoryList)
+	var err error
+	switch order_key {
+	case Filter_Category_Create:
+		if inverted{
+			_, err = qs.OrderBy("-" + Filter_Category_Create).All(&categoryList)
+		}else {
+			_, err = qs.OrderBy(Filter_Category_Create).All(&categoryList)
+		}
+	case Filter_Category_ArticleCount:
+		if inverted{
+			_, err = qs.OrderBy("-" + Filter_Category_ArticleCount).All(&categoryList)
+		}else {
+			_, err = qs.OrderBy(Filter_Category_ArticleCount).All(&categoryList)
+		}
+	}
 	return categoryList, err
 }
 func AddCategory(category Category) error {

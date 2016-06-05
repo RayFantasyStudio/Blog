@@ -14,6 +14,7 @@ const (
 	tag_delete = "tag_delete"
 
 	article_filter = "article_filter"
+	category_filter = "category_filter"
 )
 
 type AdminController  struct {
@@ -21,7 +22,7 @@ type AdminController  struct {
 }
 
 func (c *AdminController) Get() {
-	//处理过滤器
+	//处理文章过滤器
 	var articles []*models.Article
 	var err error
 	article_category_filter := c.GetSession("article_category_filter")
@@ -50,10 +51,21 @@ func (c *AdminController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-
 	c.Data["Articles"] = articles
 
-	categories, err := models.GetCategories()
+	//处理分类过滤器
+	var categories []*models.Category
+	category_order_filter := c.GetSession("category_order")
+	switch category_order_filter {
+	case "category_create_ascending":
+		categories,err = models.GetCategories(models.Filter_Category_Create,false)
+	case "category_create_descending":
+		categories,err = models.GetCategories(models.Filter_Category_Create,true)
+	case "category_article_count_ascending":
+		categories,err = models.GetCategories(models.Filter_Category_ArticleCount,false)
+	case "category_article_count_descending":
+		categories,err = models.GetCategories(models.Filter_Category_ArticleCount,true)
+	}
 	if err != nil {
 		beego.Error(err)
 	}
@@ -125,6 +137,8 @@ func (c *AdminController) Post() {
 	case article_filter:
 		c.SetSession("article_category_filter", c.Input().Get("article_category_filter"))
 		c.SetSession("article_order", c.Input().Get("order"))
+	case category_filter:
+		c.SetSession("category_order", c.Input().Get("category_order"))
 	}
 	c.Redirect("/admin", 302)
 }
