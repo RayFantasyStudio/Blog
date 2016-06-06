@@ -235,5 +235,20 @@ func DeleteArticle(id int64) error {
 	o := orm.NewOrm()
 	cate := Article{Id : id}
 	_, err := o.Delete(&cate)
+	if err != nil {
+		return err
+	}
+	var delete_list []ArticleTag
+	qs := o.QueryTable("article_tag").Filter("article_id",id)
+	_,err = qs.All(&delete_list)
+	if err != nil {
+		return err
+	}
+	for _,x := range delete_list {
+		_,err = o.Delete(&x)
+		if err != nil {
+			return err
+		}
+	}
 	return err
 }

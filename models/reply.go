@@ -14,6 +14,7 @@ type Reply struct {
 	LikeCount    int64
 	QuoteReplyId int64
 }
+
 func AddReply(reply *Reply) error {
 	reply.Time = time.Now()
 	o := orm.NewOrm()
@@ -24,23 +25,22 @@ func DeleteReply(Id int64) error {
 	o := orm.NewOrm()
 	reply := Reply{}
 	var err error
-	if Id > -1 {
-		reply.Id = Id
-		_, err = o.Delete(&reply)
-	}
+	reply.Id = Id
+	_, err = o.Delete(&reply)
+
 	return err
 }
-func GetReplies(aid int64) ([]*Reply,error){
+func GetReplies(aid int64) ([]*Reply, error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable("reply").Filter("article_id",aid)
-	replies := make([]*Reply,0)
-	_,err :=  qs.All(&replies)
-	return replies,err
+	qs := o.QueryTable("reply").Filter("article_id", aid)
+	replies := make([]*Reply, 0)
+	_, err := qs.All(&replies)
+	return replies, err
 }
-func GetAdminReplies() ([]*Reply,error){
+func GetAdminReplies() ([]*Reply, error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("reply")
-	replies := make([]*Reply,0)
-	_,err :=  qs.All(&replies)
-	return replies,err
+	replies := make([]*Reply, 0)
+	_, err := qs.All(&replies)
+	return replies, err
 }

@@ -64,7 +64,8 @@
                     <div class="field ">
                         <textarea name="reply_content" placeholder="请输入评论内容"></textarea>
                     </div>
-                    <button class="ui blue labeled submit icon button" type="submit"><i class="icon edit"></i> 添加评论</button>
+                    <button class="ui blue labeled submit icon button" type="submit"><i class="icon edit"></i> 添加评论
+                    </button>
                 </form>
             </div>
         </div>

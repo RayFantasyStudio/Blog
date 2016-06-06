@@ -23,8 +23,11 @@
         <td>[[.LikeCount]]</td>
         <td>[[.QuoteReplyId]]</td>
         <td>
-            <a href="/admin/tag?op=delete">删除</a><br>
-            <a href="/">重命名</a>
+            <form action="/admin" method="post">
+                <input type="hidden" value="reply_delete" name="op">
+                <input type="hidden" value="[[.Id]]" name="delete_reply_id">
+                <button class="ui red button" type="submit">删除</button>
+            </form>
         </td>
     </tr>
     [[end]]

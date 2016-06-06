@@ -8,10 +8,12 @@ import (
 
 //admin操作op
 const (
+	article_delete = "article_delete"
 	category_rename = "category_rename"
 	category_delete = "category_delete"
 	tag_rename = "tag_rename"
 	tag_delete = "tag_delete"
+	reply_delete = "reply_delete"
 
 	article_filter = "article_filter"
 	category_filter = "category_filter"
@@ -30,6 +32,7 @@ func (c *AdminController) Get() {
 		article_category_filter = ""
 	}
 	article_order_filter := c.GetSession("article_order")
+	beego.Info(article_order_filter)
 	switch article_order_filter {
 	case "create_ascending":
 		articles, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", true)
@@ -58,13 +61,13 @@ func (c *AdminController) Get() {
 	category_order_filter := c.GetSession("category_order")
 	switch category_order_filter {
 	case "category_create_ascending":
-		categories,err = models.GetCategories(models.Filter_Category_Create,false)
+		categories, err = models.GetCategories(models.Filter_Category_Create, false)
 	case "category_create_descending":
-		categories,err = models.GetCategories(models.Filter_Category_Create,true)
+		categories, err = models.GetCategories(models.Filter_Category_Create, true)
 	case "category_article_count_ascending":
-		categories,err = models.GetCategories(models.Filter_Category_ArticleCount,false)
+		categories, err = models.GetCategories(models.Filter_Category_ArticleCount, false)
 	case "category_article_count_descending":
-		categories,err = models.GetCategories(models.Filter_Category_ArticleCount,true)
+		categories, err = models.GetCategories(models.Filter_Category_ArticleCount, true)
 	}
 	if err != nil {
 		beego.Error(err)
@@ -89,6 +92,16 @@ func (c *AdminController) Post() {
 	op := c.Input().Get("op")
 	beego.Info("op = ", op)
 	switch op {
+	case article_delete:
+		aid, err := strconv.ParseInt(c.Input().Get("delete_article_id"), 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+		err = models.DeleteArticle(aid)
+		if err != nil {
+			beego.Error(err)
+		}
+		c.Redirect("/admin#/article", 302)
 	case category_rename:
 		former_category := c.Input().Get("former_category")
 		new_category := c.Input().Get("new_category")
@@ -133,12 +146,23 @@ func (c *AdminController) Post() {
 			beego.Error(err)
 		}
 		c.Redirect("/admin#/tag", 302)
-
+	case reply_delete:
+		delete_reply_id, err := strconv.ParseInt(c.Input().Get("delete_reply_id"), 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+		err = models.DeleteReply(delete_reply_id)
+		if err != nil {
+			beego.Error(err)
+		}
+		c.Redirect("/admin#/reply", 302)
 	case article_filter:
 		c.SetSession("article_category_filter", c.Input().Get("article_category_filter"))
 		c.SetSession("article_order", c.Input().Get("order"))
+		c.Redirect("/admin#/article", 302)
 	case category_filter:
 		c.SetSession("category_order", c.Input().Get("category_order"))
+		c.Redirect("/admin", 302)
 	}
-	c.Redirect("/admin", 302)
+	c.Redirect("/admin",302)
 }

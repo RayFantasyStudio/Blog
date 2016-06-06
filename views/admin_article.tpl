@@ -18,7 +18,8 @@
                 </div>
                 <div class="twelve wide column">
                     <div class="label">文章标签：</div>
-                    <select class="ui search selection dropdown" multiple="" name="article_tag_filter" id="tag_selector">
+                    <select class="ui search selection dropdown" multiple="" name="article_tag_filter"
+                            id="tag_selector">
                         <option value="">全部</option>
                         [[range .Tags]]
                         <option value="[[.Name]]">[[.Name]]</option>
@@ -30,17 +31,18 @@
             <div class="ui grid">
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order" checked="" tabindex="0" class="hidden" value="create_ascending">
+                        <input type="radio" name="order" checked="" tabindex="0" class="hidden"
+                               value="create_ascending">
                         <label>按照创建日期升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order"  tabindex="0" class="hidden" value="create_descending">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="create_descending">
                         <label>按照创建日期降序</label>
                     </div>
                 </div>
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order"  tabindex="0" class="hidden" value="update_ascending">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="update_ascending">
                         <label>按照更新日期升序</label>
                     </div>
                     <div class="ui radio checkbox">
@@ -54,17 +56,17 @@
                         <label>按照最后回复升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order"  tabindex="0" class="hidden" value="last_reply_time_descending">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="last_reply_time_descending">
                         <label>按照最后回复降序</label>
                     </div>
                 </div>
                 <div class="four wide column">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order"  tabindex="0" class="hidden" value="view_count_ascending">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="view_count_ascending">
                         <label>按照查看数升序</label>
                     </div>
                     <div class="ui radio checkbox">
-                        <input type="radio" name="order"  tabindex="0" class="hidden" value="view_count_descending">
+                        <input type="radio" name="order" tabindex="0" class="hidden" value="view_count_descending">
                         <label>按照查看数降序</label>
                     </div>
                 </div>
@@ -101,15 +103,19 @@
             共 [[.ReplyCount]] 条回复
         </td>
         <td>
-            <a href="/admin/article?op=delete">删除</a><br>
-            <a href="/">修改</a>
+            <form action="/admin" method="post">
+                <input type="hidden" value="article_delete" name="op">
+                <input type="hidden" value="[[.Id]]" name="delete_article_id">
+                <button class="ui red button" type="submit">删除</button>
+            </form>
+            <a href="/article/modify?id=[[.Id]]">修改</a>
         </td>
     </tr>
     [[end]]
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="6">
+        <th colspan=" 6">
             <div class="ui right floated pagination menu">
                 <a class="icon item">
                     <i class="left chevron icon"></i>
