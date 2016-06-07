@@ -26,6 +26,7 @@
             </div>
         </div>
         [[end]]
+        [[template "paginator" .Paginator]]
     </div>
 </div>
 [[template "footer"]]
