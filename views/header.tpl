@@ -39,9 +39,15 @@
             </a>
             [[end]]
             <div class="ui icon input">
-                <input type="text" placeholder="Search...">
-                <i class="inverted circular search link icon"></i>
+                <input type="text" placeholder="Search..." id="search_content">
+                <i class="inverted circular search link icon" onclick="search()"></i>
             </div>
+            <script>
+                function search() {
+                    var search_key = $('#search_content').val();
+                    location.assign("/search"+"?key="+search_key);
+                }
+            </script>
         </div>
     </div>
 </div>

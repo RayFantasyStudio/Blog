@@ -39,8 +39,9 @@ func (c *ArticleCreateController) Post() {
 	}
 	raw_tags := c.Input().Get("tags")
 	tagstr := strings.Split(raw_tags, " ")
+	user,err := models.GetUserFromContext(c.Ctx)
+	article.Author = user
 	err = models.AddArticle(article, tagstr)
-
 	if err != nil {
 		beego.Error(err)
 	}
