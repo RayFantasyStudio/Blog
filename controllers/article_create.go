@@ -7,16 +7,16 @@ import (
 	"strings"
 )
 
-type ArticleCreaateController struct {
+type ArticleCreateController struct {
 	beego.Controller
 }
 
-func (c *ArticleCreaateController) Get() {
+func (c *ArticleCreateController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	c.TplName = "article_create.tpl"
 }
 
-func (c *ArticleCreaateController) Post() {
+func (c *ArticleCreateController) Post() {
 	title := c.Input().Get("title")
 	subtitle := c.Input().Get("subtitle")
 	category := c.Input().Get("category")

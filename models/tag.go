@@ -65,3 +65,11 @@ func DeleteTag(tagId int64) error{
 	}
 	return err
 }
+func FindTags(key string) ([]Tag,error){
+	var tags []Tag
+	var err error
+	o := orm.NewOrm()
+	qs := o.QueryTable("tag").Filter("name__iexact",key)
+	_,err = qs.All(&tags)
+	return  tags,err
+}

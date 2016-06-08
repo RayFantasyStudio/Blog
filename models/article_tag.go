@@ -65,3 +65,19 @@ func GetTagAccroingAritcle(article_id int64) ([]Tag, error) {
 	}
 	return tags, err
 }
+func FindArticleTagFromTags(tags []Tag) ([]ArticleTag,error){
+	var article_tags []ArticleTag
+	var err error
+	o := orm.NewOrm()
+	qs := o.QueryTable("article_tag")
+	for _,x := range tags {
+		qs = qs.Filter("tag_id",x.Id)
+		var article_tag_tmp ArticleTag
+		err = qs.One(&article_tag_tmp)
+		if err != nil {
+			return nil,err
+		}
+		article_tags = append(article_tags,article_tag_tmp)
+	}
+	return article_tags,err
+}

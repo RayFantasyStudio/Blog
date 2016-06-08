@@ -252,3 +252,61 @@ func DeleteArticle(id int64) error {
 	}
 	return err
 }
+func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag bool) ([]Article,error){
+	o := orm.NewOrm()
+	var articles []Article
+	var articles_tmp []Article
+	var err error
+	//按照标题检索
+	if byTitle{
+		qs_article_title := o.QueryTable("article").Filter("title__iexact", key)
+		_,err = qs_article_title.All(&articles_tmp)
+		for _,x:= range articles_tmp{
+			articles = append(articles,x)
+		}
+	}
+
+	//按照副标题检索
+	if byTitle{
+		qs_article_title := o.QueryTable("article").Filter("subtitle__iexact", key)
+		_,err = qs_article_title.All(&articles_tmp)
+		for _,x:= range articles_tmp{
+			articles = append(articles,x)
+		}
+	}
+
+	//按照分类检索
+	if byTitle{
+		qs_article_title := o.QueryTable("article").Filter("category__iexact", key)
+		_,err = qs_article_title.All(&articles_tmp)
+		for _,x:= range articles_tmp{
+			articles = append(articles,x)
+		}
+	}
+
+	//按照标签检索
+	if byTag{
+		var article_tmp Article
+		var tags_tmp []Tag
+		var article_tags_tmp []ArticleTag
+		qs_tag := o.QueryTable("article")
+		tags_tmp,err = FindTags(key)
+		if err != nil {
+			return nil,err
+		}
+		article_tags_tmp,err = FindArticleTagFromTags(tags_tmp)
+		if err != nil {
+			return nil,err
+		}
+
+		for _,x := range article_tags_tmp{
+			qs_tag = qs_tag.Filter("id",x.ArticleId)
+			err = qs_tag.One(&article_tmp)
+			if err != nil {
+				return nil,err
+			}
+			articles = append(articles,article_tmp)
+		}
+	}
+	return articles,err
+}

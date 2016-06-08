@@ -26,4 +26,4 @@ _testmain.go
 *.prof
 .idea
 conf/mysql.conf
-conf/mysql.conf
+blog.exe~
