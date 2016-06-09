@@ -255,11 +255,11 @@ func DeleteArticle(id int64) error {
 func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag bool) ([]Article,error){
 	o := orm.NewOrm()
 	var articles []Article
-	var articles_tmp []Article
 	var err error
 	//按照标题检索
 	if byTitle{
 		qs_article_title := o.QueryTable("article").Filter("title__iexact", key)
+		var articles_tmp []Article
 		_,err = qs_article_title.All(&articles_tmp)
 		for _,x:= range articles_tmp{
 			articles = append(articles,x)
@@ -269,6 +269,7 @@ func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag 
 	//按照副标题检索
 	if byTitle{
 		qs_article_title := o.QueryTable("article").Filter("subtitle__iexact", key)
+		var articles_tmp []Article
 		_,err = qs_article_title.All(&articles_tmp)
 		for _,x:= range articles_tmp{
 			articles = append(articles,x)
@@ -278,6 +279,7 @@ func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag 
 	//按照分类检索
 	if byTitle{
 		qs_article_title := o.QueryTable("article").Filter("category__iexact", key)
+		var articles_tmp []Article
 		_,err = qs_article_title.All(&articles_tmp)
 		for _,x:= range articles_tmp{
 			articles = append(articles,x)
