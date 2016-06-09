@@ -3,13 +3,18 @@
 * The Simple Blog base on Beego and using Golang
 
 ## 如何运行
-### 1. 导入项目
+### 1. 获取依赖
 ```
-go get github.com/astaxie/beego
-go get github.com/RayFantasyStudio/blog
+go get -u github.com/astaxie/beego
+go get -u github.com/Unknwon/goconfig
 ```
 
-### 2. 配置数据库
+### 2. 获取项目
+```
+go get -u github.com/RayFantasyStudio/blog
+```
+
+### 3. 配置数据库
 目前仅支持MySQL/MariaDb，确认安装好SQL Server后，在`<GOPATH>/github.com/RayFantasyStudio/blog/conf`中，新建名为`mysql.conf`的文件，写入以下内容
 ```
 # 访问数据库的用户名
@@ -29,11 +34,24 @@ mysqldb   = rfs_blog
 ```
 请将=后的内容改成你自己的
 
-### 3. 编译运行
+### 4. 编译运行
+#### 直接编译运行
 ```
 cd <GOPATH>/github.com/RayFantasyStudio/blog
 go build main.go
 ./main
+```
+
+#### 使用bee工具
+1. 安装bee工具
+```
+go get github.com/beego/bee
+```
+
+2. 通过bee工具编译运行
+```
+cd <GOPATH>/github.com/RayFantasyStudio/blog
+bee run
 ```
 
 ## 许可证(License)
