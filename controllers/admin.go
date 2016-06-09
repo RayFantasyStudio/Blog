@@ -35,21 +35,21 @@ func (c *AdminController) Get() {
 	beego.Info(article_order_filter)
 	switch article_order_filter {
 	case "create_ascending":
-		articles, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", true)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", true,1)
 	case "create_descending":
-		articles, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", false)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", false,1)
 	case "update_ascending":
-		articles, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", true)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", true,1)
 	case "update_descending":
-		articles, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", false)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", false,1)
 	case "last_reply_time_ascending":
-		articles, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", true)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", true,1)
 	case "last_reply_time_descending":
-		articles, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", false)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", false,1)
 	case "view_count_ascending":
-		articles, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", true)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", true,1)
 	case "view_count_descending":
-		articles, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", false)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", false,1)
 	}
 	if err != nil {
 		beego.Error(err)
@@ -164,5 +164,5 @@ func (c *AdminController) Post() {
 		c.SetSession("category_order", c.Input().Get("category_order"))
 		c.Redirect("/admin", 302)
 	}
-	c.Redirect("/admin",302)
+	c.Redirect("/admin", 302)
 }

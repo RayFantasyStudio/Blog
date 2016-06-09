@@ -13,7 +13,11 @@ const (
 	Filter_Update = "updated"
 	Filter_ViewCount = "view_count"
 	Filter_LastReplyTime = "last_reply_time"
+
+	AtriclePerPageLimt = 10
 )
+
+var TotalArticleCount int
 
 type Article struct {
 	Id              int64
@@ -30,7 +34,7 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticles(order_key string, category, tag string, inverted bool) (articles []*Article, err error) {
+func GetArticles(order_key string, category, tag string, inverted bool, page int) (articles []*Article, article_count int, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
 	switch order_key {
@@ -42,11 +46,12 @@ func GetArticles(order_key string, category, tag string, inverted bool) (article
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Create).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Create).All(&articles)
+			_, err = query.OrderBy(Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_LastReplyTime:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -55,11 +60,12 @@ func GetArticles(order_key string, category, tag string, inverted bool) (article
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_LastReplyTime).All(&articles)
+			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_LastReplyTime).All(&articles)
+			_, err = query.OrderBy(Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_ViewCount:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -68,11 +74,12 @@ func GetArticles(order_key string, category, tag string, inverted bool) (article
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_ViewCount).All(&articles)
+			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_ViewCount).All(&articles)
+			_, err = query.OrderBy(Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_Update:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -81,14 +88,16 @@ func GetArticles(order_key string, category, tag string, inverted bool) (article
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Update).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Update).All(&articles)
+			_, err = query.OrderBy(Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	}
-	_, err = query.All(&articles)
-	return articles, err
+	_, err = query.Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+	article_count = len(articles)
+	return articles, article_count, err
 }
 func GetArticle(id int64) (*Article, error) {
 	o := orm.NewOrm()
@@ -150,7 +159,8 @@ func AddArticle(article Article, tagsrt []string) error {
 			return err
 		}
 	}
-
+	TotalArticleCount++
+	beego.Info("Total article count = ", TotalArticleCount)
 	return err
 }
 func ModifyArticle(article *Article, raw_former_tag string, raw_tags string) error {
@@ -239,76 +249,82 @@ func DeleteArticle(id int64) error {
 		return err
 	}
 	var delete_list []ArticleTag
-	qs := o.QueryTable("article_tag").Filter("article_id",id)
-	_,err = qs.All(&delete_list)
+	qs := o.QueryTable("article_tag").Filter("article_id", id)
+	_, err = qs.All(&delete_list)
 	if err != nil {
 		return err
 	}
-	for _,x := range delete_list {
-		_,err = o.Delete(&x)
+	for _, x := range delete_list {
+		_, err = o.Delete(&x)
 		if err != nil {
 			return err
 		}
 	}
+
+	TotalArticleCount--
+	beego.Info("Total article count = ", TotalArticleCount)
 	return err
 }
-func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag bool) ([]Article,error){
+func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, byTag bool) ([]Article, error) {
 	o := orm.NewOrm()
 	var articles []Article
 	var err error
 	//按照标题检索
-	if byTitle{
+	if byTitle {
 		qs_article_title := o.QueryTable("article").Filter("title__iexact", key)
 		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
+		_, err = qs_article_title.All(&articles_tmp)
+		for _, x := range articles_tmp {
+			articles = append(articles, x)
 		}
 	}
 
 	//按照副标题检索
-	if byTitle{
+	if byTitle {
 		qs_article_title := o.QueryTable("article").Filter("subtitle__iexact", key)
 		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
+		_, err = qs_article_title.All(&articles_tmp)
+		for _, x := range articles_tmp {
+			articles = append(articles, x)
 		}
 	}
 
 	//按照分类检索
-	if byTitle{
+	if byTitle {
 		qs_article_title := o.QueryTable("article").Filter("category__iexact", key)
 		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
+		_, err = qs_article_title.All(&articles_tmp)
+		for _, x := range articles_tmp {
+			articles = append(articles, x)
 		}
 	}
 
 	//按照标签检索
-	if byTag{
+	if byTag {
 		var article_tmp Article
 		var tags_tmp []Tag
 		var article_tags_tmp []ArticleTag
 		qs_tag := o.QueryTable("article")
-		tags_tmp,err = FindTags(key)
+		tags_tmp, err = FindTags(key)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
-		article_tags_tmp,err = FindArticleTagFromTags(tags_tmp)
+		article_tags_tmp, err = FindArticleTagFromTags(tags_tmp)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 
-		for _,x := range article_tags_tmp{
-			qs_tag = qs_tag.Filter("id",x.ArticleId)
+		for _, x := range article_tags_tmp {
+			qs_tag = qs_tag.Filter("id", x.ArticleId)
 			err = qs_tag.One(&article_tmp)
 			if err != nil {
-				return nil,err
+				return nil, err
 			}
-			articles = append(articles,article_tmp)
+			articles = append(articles, article_tmp)
 		}
 	}
-	return articles,err
+	return articles, err
+}
+func GetTotalArticleCOunt() (int) {
+	return TotalArticleCount
 }
