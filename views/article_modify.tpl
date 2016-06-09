@@ -1,5 +1,5 @@
 [[template "header" .]]
-
+<script src="//cdn.ckeditor.com/4.5.9/standard/ckeditor.js"></script>
 <div class="ui  container">
     [[$tags := .Tags]]
     [[with .Article]]
@@ -33,7 +33,10 @@
 
                         <div class="field">
                             <label>正文:</label>
-                            <textarea name="content" rows="100">[[.Content]]</textarea>
+                            <textarea name="content" style="height: 1500px">[[.Content]]</textarea>
+                            <script>
+                                CKEDITOR.replace( 'content' );
+                            </script>
                         </div>
                         <div class="field">
                             <button class="positive ui button" type="submit">修改</button>

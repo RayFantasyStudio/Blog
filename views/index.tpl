@@ -8,7 +8,6 @@
                 <div class="meta ui right floated">
                     <span style="color: black">Category</span>
                     <span>[[$article.Created | SinceTime]]</span>
-                    <span>被置顶</span>
                 </div>
                 <div>
                     [[$article.Subtitle]]
