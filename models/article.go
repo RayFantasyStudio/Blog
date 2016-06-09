@@ -21,11 +21,11 @@ var TotalArticleCount int64
 
 type Article struct {
 	Id              int64
-	Title           string
-	Subtitle        string
-	Content         string`orm:"size(10000)"`
-	Author          *User`orm:"rel(fk)"`
-	Category        string
+	Title           string `form:"title"`
+	Subtitle        string `form:"subtitle"`
+	Content         string `orm:"size(10000)" form:"content"`
+	Author          *User  `orm:"rel(fk)"`
+	Category        string `form:"category"`
 	Created         time.Time `orm:"index"`
 	Updated         time.Time `orm:"index"`
 	ViewCount       int64     `orm:"index"`
