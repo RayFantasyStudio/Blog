@@ -14,6 +14,7 @@ func init() {
 	beego.Router("/article/view", &controllers.ArticleViewController{})
 	beego.Router("/article/create", &controllers.ArticleCreateController{})
 	beego.Router("/article/modify", &controllers.ArticleModifyController{})
+	beego.Router("/page/:page:int", &controllers.PageController{})
 
 	beego.AutoRouter(&controllers.ArticleViewController{})
 

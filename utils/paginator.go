@@ -2,8 +2,7 @@ package utils
 
 import (
 	"strconv"
-	"net/http"
-	"github.com/astaxie/beego"
+	"fmt"
 )
 
 type Paginator  []*PaginatorItem
@@ -15,10 +14,8 @@ type PaginatorItem struct {
 	IsDisabled bool
 }
 
-func NewPaginator(req *http.Request, curr, per, total int) *Paginator {
+func NewPaginator(linkFormat string, curr, per, total int) *Paginator {
 	var items []*PaginatorItem
-	baseLink := req.URL.RawPath
-	beego.Debug(baseLink)
 
 	lastPage := total / per
 	if (total / per) == 0 {
@@ -30,13 +27,13 @@ func NewPaginator(req *http.Request, curr, per, total int) *Paginator {
 	}
 
 	if curr > 1 {
-		pageStr := strconv.Itoa(curr - 1)
-		// FIXME: 测试结束后改为路由分发形式，下同
-		items = append(items, &PaginatorItem{Lable:"<", Link:baseLink + "?page=" + pageStr})
+		link := fmt.Sprintf(linkFormat, curr - 1)
+		items = append(items, &PaginatorItem{Lable:"<", Link:link})
 	}
 
 	if curr - 2 > 1 {
-		items = append(items, &PaginatorItem{Lable:"1", Link:baseLink + "?page=1"})
+		link := fmt.Sprintf(linkFormat, 1)
+		items = append(items, &PaginatorItem{Lable:"1", Link:link})
 		items = append(items, &PaginatorItem{Lable:"...", IsDisabled:true})
 	}
 
@@ -45,8 +42,8 @@ func NewPaginator(req *http.Request, curr, per, total int) *Paginator {
 		if page <= 0 || page > lastPage {
 			continue
 		}
-		pageStr := strconv.Itoa(page)
-		item := &PaginatorItem{Lable:pageStr, Link:baseLink + "?page=" + pageStr}
+		link := fmt.Sprintf(linkFormat, page)
+		item := &PaginatorItem{Lable:strconv.Itoa(page), Link:link}
 		if i == 0 {
 			item.IsActive = true
 		}
@@ -55,13 +52,13 @@ func NewPaginator(req *http.Request, curr, per, total int) *Paginator {
 
 	if curr + 2 < lastPage {
 		items = append(items, &PaginatorItem{Lable:"...", IsDisabled:true})
-		lastPageStr := strconv.Itoa(lastPage)
-		items = append(items, &PaginatorItem{Lable:lastPageStr, Link:baseLink + "?page=" + lastPageStr})
+		link := fmt.Sprintf(linkFormat, lastPage)
+		items = append(items, &PaginatorItem{Lable:strconv.Itoa(lastPage), Link:link})
 	}
 
 	if curr < lastPage {
-		pageStr := strconv.Itoa(curr + 1)
-		items = append(items, &PaginatorItem{Lable:">", Link:baseLink + "?page=" + pageStr})
+		link := fmt.Sprintf(linkFormat, curr + 1)
+		items = append(items, &PaginatorItem{Lable:">", Link:link})
 	}
 
 	paginator := Paginator(items)
