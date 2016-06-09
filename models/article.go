@@ -17,7 +17,7 @@ const (
 	AtriclePerPageLimt = 10
 )
 
-var TotalArticleCount int
+var TotalArticleCount int64
 
 type Article struct {
 	Id              int64
@@ -271,7 +271,7 @@ func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, by
 	var err error
 	//按照标题检索
 	if byTitle {
-		qs_article_title := o.QueryTable("article").Filter("title__iexact", key)
+		qs_article_title := o.QueryTable("article").Filter("title__icontains", key)
 		var articles_tmp []Article
 		_, err = qs_article_title.All(&articles_tmp)
 		for _, x := range articles_tmp {
@@ -281,7 +281,7 @@ func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, by
 
 	//按照副标题检索
 	if byTitle {
-		qs_article_title := o.QueryTable("article").Filter("subtitle__iexact", key)
+		qs_article_title := o.QueryTable("article").Filter("subtitle__icontains", key)
 		var articles_tmp []Article
 		_, err = qs_article_title.All(&articles_tmp)
 		for _, x := range articles_tmp {
@@ -291,7 +291,7 @@ func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, by
 
 	//按照分类检索
 	if byTitle {
-		qs_article_title := o.QueryTable("article").Filter("category__iexact", key)
+		qs_article_title := o.QueryTable("article").Filter("category__icontains", key)
 		var articles_tmp []Article
 		_, err = qs_article_title.All(&articles_tmp)
 		for _, x := range articles_tmp {
@@ -325,6 +325,6 @@ func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, by
 	}
 	return articles, err
 }
-func GetTotalArticleCOunt() (int) {
+func GetTotalArticleCOunt() (int64) {
 	return TotalArticleCount
 }

@@ -5,10 +5,12 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/utils"
 	"github.com/RayFantasyStudio/blog/models"
+	"github.com/astaxie/beego/orm"
 )
 func init(){
 	var err error
-	_,models.TotalArticleCount,err =models.GetArticles(models.Filter_Create,"","",false)
+	o := orm.NewOrm()
+	models.TotalArticleCount,err = o.QueryTable("article").Count()
 	if err != nil {
 		beego.Error(err)
 	}
