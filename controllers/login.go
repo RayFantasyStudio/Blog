@@ -21,9 +21,7 @@ func (c *LoginController) Post() {
 	var err error
 	defer func() {
 		if err != nil {
-			flash := beego.NewFlash()
-			flash.Notice("登陆失败，%s", err)
-			flash.Store(&c.Controller)
+			NewNoticeFlash(&c.Controller, "登陆失败，%s", err)
 			c.Redirect(beego.URLFor("LoginController.Get"), 302)
 		}
 	}()
@@ -43,10 +41,16 @@ func (c *LoginController) Post() {
 	}
 
 	c.Ctx.SetCookie("token", token)
+
+	NewNoticeFlash(&c.Controller, "登陆成功，欢迎回来 %s", user.Name)
+
 	c.Redirect("/", 302)
 }
 
 func (c *LoginController) Logout() {
 	c.Ctx.SetCookie("token", "")
+
+	NewNoticeFlash(&c.Controller, "注销成功")
+
 	c.Redirect("/", 302)
 }

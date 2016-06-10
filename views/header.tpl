@@ -17,6 +17,11 @@
     <div class="ui main text container">
         <h1 class="ui header">[[.Owner]]的Blog</h1>
         <p>RayFantasyStudio官方Blog</p>
+        [[if .Message ]]
+        <div class="ui message" id="flash">
+            <p>[[.Message]]</p>
+        </div>
+        [[end]]
     </div>
     <div class="ui borderless main menu">
         <div class="ui text container">

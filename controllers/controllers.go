@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
+	"fmt"
 )
 
 var owner string
@@ -24,5 +25,22 @@ func initHeaderFooterData(c *beego.Controller, title string) (user *models.User,
 			c.Data["User"] = user
 		}
 	}
+
+	flash := beego.ReadFromRequest(c)
+	if n, ok := flash.Data["notice"]; ok {
+		c.Data["Message"] = n
+	}
 	return
+}
+
+func NewNoticeFlash(c *beego.Controller, msg string, args ...interface{}) {
+	var data string
+	if len(args) == 0 {
+		data = msg
+	} else {
+		data = fmt.Sprintf(msg, args...)
+	}
+	flash := beego.NewFlash()
+	flash.Notice(data)
+	flash.Store(c)
 }

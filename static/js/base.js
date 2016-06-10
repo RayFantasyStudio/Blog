@@ -38,5 +38,7 @@ $(function () {
     });
 
     $('.tabs.menu .item').tab({history: true});
+
+    $("#flash").delay(2000).fadeOut();
 })
 ;
