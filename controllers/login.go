@@ -48,6 +48,9 @@ func (c *LoginController) Post() {
 }
 
 func (c *LoginController) Logout() {
+	token := c.Ctx.GetCookie("token")
+	models.ExpireToken(token)
+
 	c.Ctx.SetCookie("token", "")
 
 	NewNoticeFlash(&c.Controller, "注销成功")

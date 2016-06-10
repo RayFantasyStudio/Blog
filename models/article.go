@@ -35,6 +35,13 @@ type Article struct {
 	LastReplyUserId int64
 }
 
+func initArticle() {
+	err := SetupTotalArticleCount()
+	if err != nil {
+		beego.Error(err)
+	}
+}
+
 func GetArticles(order_key string, category, tag string, inverted bool, page int) (articles []*Article, article_count int, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")

@@ -5,15 +5,32 @@ import (
 	"github.com/RayFantasyStudio/blog/utils"
 	"fmt"
 	"github.com/astaxie/beego/validation"
+	"github.com/astaxie/beego"
+	"time"
+	"github.com/garyburd/redigo/redis"
 	"github.com/astaxie/beego/context"
+	"encoding/json"
 )
 
-var accessToken = make(map[string]int)
+// 登陆有效期60天
+const UserTokenPeriod = 60 * 24 * time.Hour
 
 type User struct {
 	Id   int `form:"_" json:"id"`
 	Name string `orm:"size(16);unique" form:"name" json:"name" valid:"Required"`
 	Pwd  string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)"`
+}
+
+type userToken struct {
+	User       User
+	ExpireTime time.Time
+	IsExpire   bool
+}
+
+var UserTokenPrefix string
+
+func initUser() {
+	UserTokenPrefix = beego.AppConfig.String("appname") + "_usertoken:"
 }
 
 // 新建用户
@@ -58,7 +75,11 @@ func (u *User) Login() (token string, err error) {
 	}
 
 	token = generateToken()
-	accessToken[token] = user.Id
+	userToken := &userToken{User:user, ExpireTime:time.Now().Add(UserTokenPeriod)}
+	err = userToken.store(redisPool.Get(), token)
+	if err != nil {
+		return
+	}
 
 	return
 }
@@ -73,64 +94,95 @@ func (u *User) ReadById() error {
 func generateToken() string {
 	token := utils.GetRandomString(16)
 
+	isExist, _ := redis.Bool(redisPool.Get().Do("EXISTS", UserTokenPrefix + token))
+
 	// 如果发现重复的Token，重新生成
-	if accessToken[token] != 0 {
+	if isExist {
 		return generateToken()
 	}
 
 	return token
 }
 
-// 根据Token取得Uid
-func GetUidByToken(token string) (uid int, err error) {
-	uid = accessToken[token]
-	if uid == 0 {
-		err = fmt.Errorf("token: \"%s\"无效", token)
-		return
-	}
-	return
-}
-
-// 根据Token获取一个仅有Id的User
-func GetEmptyUserByToken(token string) (eUser *User, err error) {
-	var uid int
-	if uid, err = GetUidByToken(token); err != nil {
-		return
-	}
-
-	eUser = &User{Id:uid}
-	return
-}
-
 // 根据Token取得User
 func GetUserByToken(token string) (user *User, err error) {
-	user, err = GetEmptyUserByToken(token)
+	conn := redisPool.Get()
+
+	userToken, err := getUserToken(conn, token)
 	if err != nil {
 		return
 	}
 
-	if err = user.ReadById(); err != nil {
+	if userToken.IsExpire {
+		err = fmt.Errorf("Token:\"%s\"已过期", token)
 		return
 	}
 
-	return
-}
+	if userToken.ExpireTime.Before(time.Now()) {
+		userToken.IsExpire = true
+		userToken.store(conn, token)
+		err = fmt.Errorf("Token:\"%s\"已过期", token)
+		return
+	}
 
-func GetEmptyUserFromContext(ctx *context.Context) (eUser *User, err error) {
-	token := ctx.GetCookie("token")
-	eUser, err = GetEmptyUserByToken(token)
+	user = &userToken.User
+
 	return
 }
 
 func GetUserFromContext(ctx *context.Context) (user *User, err error) {
 	token := ctx.GetCookie("token")
 	user, err = GetUserByToken(token)
+	if err != nil {
+		ctx.SetCookie("token", "")
+	}
 	return
 }
 
-func GetUidFromContext(ctx *context.Context) (uid int, err error) {
-	token := ctx.GetCookie("token")
-	uid, err = GetUidByToken(token)
+func ExpireToken(token string) error {
+	conn := redisPool.Get()
+	userToken, err := getUserToken(conn, token)
+	if err != nil {
+		return err
+	}
+	userToken.IsExpire = true
+	err = userToken.store(conn, token)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ut *userToken) store(conn redis.Conn, token string) (err error) {
+	tokenStr := UserTokenPrefix + token
+
+	serialized, err := json.Marshal(ut)
+	if err != nil {
+		return
+	}
+	conn.Do("set", tokenStr, serialized)
+
+	return
+}
+
+func getUserToken(conn redis.Conn, token string) (ut *userToken, err error) {
+	tokenStr := UserTokenPrefix + token
+	raw, err := conn.Do("get", tokenStr)
+	if err != nil {
+		return
+	}
+	serialized, ok := raw.([]byte)
+	if !ok {
+		err = fmt.Errorf("UserToken转换失败")
+		return
+	}
+
+	ut = new(userToken)
+	if err = json.Unmarshal(serialized, ut); err != nil {
+		err = fmt.Errorf("UserToken转换失败")
+		return
+	}
+
 	return
 }
 

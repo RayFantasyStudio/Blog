@@ -7,6 +7,7 @@
 ```
 go get -u github.com/astaxie/beego
 go get -u github.com/Unknwon/goconfig
+go get -u github.com/garyburd/redigo/redis
 ```
 
 ### 2. 获取项目
@@ -15,7 +16,7 @@ go get -u github.com/RayFantasyStudio/blog
 ```
 
 ### 3. 配置数据库
-目前仅支持MySQL/MariaDb，确认安装好SQL Server后，在`<GOPATH>/github.com/RayFantasyStudio/blog/conf`中，新建名为`mysql.conf`的文件，写入以下内容
+本项目使用MySQL/MariaDb+Redis，确认安装好数据库Server后，在`<GOPATH>/github.com/RayFantasyStudio/blog/conf`中，新建名为`mysql.conf`的文件，写入以下内容
 ```
 # 访问数据库的用户名
 mysqluser = user
@@ -23,14 +24,22 @@ mysqluser = user
 # 访问数据库的密码
 mysqlpwd = password
 
-# SQL Server的主机名/IP地址/域名
+# 数据库Server的主机名/IP地址/域名
 mysqlhost = localhost
 
-# 访问SQL Server的端口
+# 访问数据库Server的端口
 mysqlport = 3306
 
 # 数据库名
 mysqldb   = rfs_blog
+```
+新建名为`redis.conf`的文件，写入以下内容
+```
+# 连接协议
+redisnetwork = tcp
+
+# 数据库Server地址
+redisaddress = 127.0.0.1:6379
 ```
 请将=后的内容改成你自己的
 
