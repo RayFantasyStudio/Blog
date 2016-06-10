@@ -20,9 +20,9 @@ func (c *PageController) Get() {
 		beego.Error(err)
 	}
 
-	c.Data["Paginator"] = utils.NewPaginator("/page/%d", page, 10, 200)
+	c.Data["Paginator"] = utils.NewPaginator("/page/%d", page, models.ArticlePerPageLimit, models.GetTotalArticleCount())
 
-	c.Data["Articles"], _, err = models.GetArticles(models.Filter_Create, "", "", false,page)
+	c.Data["Articles"], _, err = models.GetArticles(models.Filter_Create, "", "", false, page)
 	if err != nil {
 		beego.Error(err)
 	}

@@ -14,11 +14,11 @@ type PaginatorItem struct {
 	IsDisabled bool
 }
 
-func NewPaginator(linkFormat string, curr, per, total int) *Paginator {
+func NewPaginator(linkFormat string, curr, per int, total int64) *Paginator {
 	var items []*PaginatorItem
 
-	lastPage := total / per
-	if (total / per) == 0 {
+	lastPage := int(total / int64(per))
+	if (total % int64(per)) != 0 {
 		lastPage++
 	}
 

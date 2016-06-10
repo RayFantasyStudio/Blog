@@ -15,10 +15,10 @@ const (
 	Filter_ViewCount = "view_count"
 	Filter_LastReplyTime = "last_reply_time"
 
-	AtriclePerPageLimt = 10
+	ArticlePerPageLimit = 10
 )
 
-var TotalArticleCount int64
+var totalArticleCount int64
 
 type Article struct {
 	Id              int64
@@ -47,9 +47,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy(Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
 		return articles, article_count, err
@@ -61,9 +61,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy(Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
 		return articles, article_count, err
@@ -75,9 +75,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy(Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
 		return articles, article_count, err
@@ -89,14 +89,14 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+			_, err = query.OrderBy(Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
 		return articles, article_count, err
 	}
-	_, err = query.Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+	_, err = query.Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 	article_count = len(articles)
 	return articles, article_count, err
 }
@@ -251,13 +251,13 @@ func DeleteArticle(id int64) error {
 		return err
 	}
 	var delete_list []ArticleTag
-	qs := o.QueryTable("article_tag").Filter("article_id",id)
-	_,err = qs.All(&delete_list)
+	qs := o.QueryTable("article_tag").Filter("article_id", id)
+	_, err = qs.All(&delete_list)
 	if err != nil {
 		return err
 	}
-	for _,x := range delete_list {
-		_,err = o.Delete(&x)
+	for _, x := range delete_list {
+		_, err = o.Delete(&x)
 		if err != nil {
 			return err
 		}
@@ -328,6 +328,16 @@ func RemoveDuplicates(articles *[]*Article) {
 	*articles = (*articles)[:j]
 }
 
-func GetTotalArticleCOunt() (int64) {
-	return TotalArticleCount
+func SetupTotalArticleCount() (err error) {
+	o := orm.NewOrm()
+	totalArticleCount, err = o.QueryTable("article").Count()
+	if err != nil {
+		return
+	}
+	beego.Info("Total article count = ", totalArticleCount)
+	return
+}
+
+func GetTotalArticleCount() (int64) {
+	return totalArticleCount
 }
