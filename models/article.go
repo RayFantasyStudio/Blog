@@ -47,11 +47,12 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Create).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Create).All(&articles)
+			_, err = query.OrderBy(Filter_Create).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_LastReplyTime:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -60,11 +61,12 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_LastReplyTime).All(&articles)
+			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_LastReplyTime).All(&articles)
+			_, err = query.OrderBy(Filter_LastReplyTime).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_ViewCount:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -73,11 +75,12 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_ViewCount).All(&articles)
+			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_ViewCount).All(&articles)
+			_, err = query.OrderBy(Filter_ViewCount).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	case Filter_Update:
 		if len(category) > 0 {
 			query = query.Filter("category", category)
@@ -86,15 +89,18 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 			query = query.Filter("tag", tag)
 		}
 		if inverted {
-			_, err = query.OrderBy("-" + Filter_Update).All(&articles)
+			_, err = query.OrderBy("-" + Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		} else {
-			_, err = query.OrderBy(Filter_Update).All(&articles)
+			_, err = query.OrderBy(Filter_Update).Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
 		}
-		return articles, err
+		article_count = len(articles)
+		return articles, article_count, err
 	}
-	_, err = query.All(&articles)
-	return articles, err
+	_, err = query.Limit(AtriclePerPageLimt).Offset((page - 1) * AtriclePerPageLimt).All(&articles)
+	article_count = len(articles)
+	return articles, article_count, err
 }
+
 func GetArticle(id int64) (*Article, error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
