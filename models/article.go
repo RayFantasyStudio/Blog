@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
 	"strings"
+	"fmt"
 )
 //文章字段过滤器
 const (
@@ -239,76 +240,78 @@ func DeleteArticle(id int64) error {
 		return err
 	}
 	var delete_list []ArticleTag
-	qs := o.QueryTable("article_tag").Filter("article_id",id)
-	_,err = qs.All(&delete_list)
+	qs := o.QueryTable("article_tag").Filter("article_id", id)
+	_, err = qs.All(&delete_list)
 	if err != nil {
 		return err
 	}
-	for _,x := range delete_list {
-		_,err = o.Delete(&x)
+	for _, x := range delete_list {
+		_, err = o.Delete(&x)
 		if err != nil {
 			return err
 		}
 	}
 	return err
 }
-func FindArticles(key string,byTitle bool,bySubtitle bool,byCategory bool,byTag bool) ([]Article,error){
+func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, byTag bool) (articles []*Article, err error) {
+	var conds []string
+	baseCond := fmt.Sprintf("article.%%s like '%%%%%s%%%%'", key)
+	// 按照标题检索
+	if byTitle {
+		conds = append(conds, fmt.Sprintf(baseCond, "title"))
+	}
+
+	// 按照副标题检索
+	if bySubtitle {
+		conds = append(conds, fmt.Sprintf(baseCond, "subtitle"))
+	}
+
+	// 按照分类检索
+	if byCategory {
+		conds = append(conds, fmt.Sprintf(baseCond, "category"))
+	}
+
+	if byTag {
+		conds = append(conds, fmt.Sprintf("tag.name like '%%%s%%'", key))
+	}
+
+	qb, err := orm.NewQueryBuilder("mysql")
+	if err != nil {
+		return
+	}
+
+	// 构造SQL语句
+	qb.Select("article.*").From("tag").
+	InnerJoin("(article INNER JOIN article_tag ON article.id = article_tag.article_id)").
+	On("tag.id = article_tag.tag_id")
+	if len(conds) > 0 {
+		qb.Where(conds[0])
+	}
+	for i := 1; i < len(conds); i++ {
+		qb.Or(conds[i])
+	}
+
+	sql := qb.String()
+
+	// 执行SQL语句
+	fmt.Println(sql)
 	o := orm.NewOrm()
-	var articles []Article
-	var err error
-	//按照标题检索
-	if byTitle{
-		qs_article_title := o.QueryTable("article").Filter("title__iexact", key)
-		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
+	o.Raw(sql).QueryRows(&articles)
+
+	RemoveDuplicates(&articles)
+
+	return
+}
+
+func RemoveDuplicates(articles *[]*Article) {
+	foundId := make(map[int64]bool)
+	j := 0
+	for i, x := range *articles {
+		if !foundId[x.Id] {
+			foundId[x.Id] = true
+			(*articles)[j] = (*articles)[i]
+			j++
 		}
 	}
-
-	//按照副标题检索
-	if byTitle{
-		qs_article_title := o.QueryTable("article").Filter("subtitle__iexact", key)
-		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
-		}
-	}
-
-	//按照分类检索
-	if byTitle{
-		qs_article_title := o.QueryTable("article").Filter("category__iexact", key)
-		var articles_tmp []Article
-		_,err = qs_article_title.All(&articles_tmp)
-		for _,x:= range articles_tmp{
-			articles = append(articles,x)
-		}
-	}
-
-	//按照标签检索
-	if byTag{
-		var article_tmp Article
-		var tags_tmp []Tag
-		var article_tags_tmp []ArticleTag
-		qs_tag := o.QueryTable("article")
-		tags_tmp,err = FindTags(key)
-		if err != nil {
-			return nil,err
-		}
-		article_tags_tmp,err = FindArticleTagFromTags(tags_tmp)
-		if err != nil {
-			return nil,err
-		}
-
-		for _,x := range article_tags_tmp{
-			qs_tag = qs_tag.Filter("id",x.ArticleId)
-			err = qs_tag.One(&article_tmp)
-			if err != nil {
-				return nil,err
-			}
-			articles = append(articles,article_tmp)
-		}
-	}
-	return articles,err
+	*articles = (*articles)[:j]
 }
