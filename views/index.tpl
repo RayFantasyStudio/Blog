@@ -4,12 +4,15 @@
         [[range $index, $article := .Articles]]
         <div class="item">
             <div class="content">
-                <a class="header">[[$article.Title]]</a>
-                <div class="meta">
-                    <a>[[$article.Created | SinceTime]]</a>
-                    <a>Category</a>
+                <a class="header" href="/article/view?id=[[$article.Id]]">[[$article.Title]]</a>
+                <div class="meta ui right floated">
+                    <span style="color: black">Category</span>
+                    <span>[[$article.Created | SinceTime]]</span>
                 </div>
-                <div class="description" id="description">
+                <div>
+                    [[$article.Subtitle]]
+                </div>
+                <div class="description" id="description" style="padding: 0 3% 0 3%">
                     <script>
                         document.getElementById('description').innerHTML =
                                 '[[$article.Content]]'
@@ -26,6 +29,7 @@
             </div>
         </div>
         [[end]]
+
         [[template "paginator" .Paginator]]
     </div>
 </div>

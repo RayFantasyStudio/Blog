@@ -14,15 +14,19 @@ const (
 	Filter_Update = "updated"
 	Filter_ViewCount = "view_count"
 	Filter_LastReplyTime = "last_reply_time"
+
+	AtriclePerPageLimt = 10
 )
+
+var TotalArticleCount int64
 
 type Article struct {
 	Id              int64
-	Title           string
-	Subtitle        string
-	Content         string`orm:"size(10000)"`
-	Author          *User`orm:"rel(fk)"`
-	Category        string
+	Title           string `form:"title"`
+	Subtitle        string `form:"subtitle"`
+	Content         string `orm:"size(10000)" form:"content"`
+	Author          *User  `orm:"rel(fk)"`
+	Category        string `form:"category"`
 	Created         time.Time `orm:"index"`
 	Updated         time.Time `orm:"index"`
 	ViewCount       int64     `orm:"index"`
@@ -31,7 +35,7 @@ type Article struct {
 	LastReplyUserId int64
 }
 
-func GetArticles(order_key string, category, tag string, inverted bool) (articles []*Article, err error) {
+func GetArticles(order_key string, category, tag string, inverted bool, page int) (articles []*Article, article_count int, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
 	switch order_key {
@@ -232,6 +236,7 @@ func ModifyArticle(article *Article, raw_former_tag string, raw_tags string) err
 	beego.Info("the raw delete list of ", tags)
 	return err
 }
+
 func DeleteArticle(id int64) error {
 	o := orm.NewOrm()
 	cate := Article{Id : id}
@@ -240,19 +245,20 @@ func DeleteArticle(id int64) error {
 		return err
 	}
 	var delete_list []ArticleTag
-	qs := o.QueryTable("article_tag").Filter("article_id", id)
-	_, err = qs.All(&delete_list)
+	qs := o.QueryTable("article_tag").Filter("article_id",id)
+	_,err = qs.All(&delete_list)
 	if err != nil {
 		return err
 	}
-	for _, x := range delete_list {
-		_, err = o.Delete(&x)
+	for _,x := range delete_list {
+		_,err = o.Delete(&x)
 		if err != nil {
 			return err
 		}
 	}
 	return err
 }
+
 func FindArticles(key string, byTitle bool, bySubtitle bool, byCategory bool, byTag bool) (articles []*Article, err error) {
 	var conds []string
 	baseCond := fmt.Sprintf("article.%%s like '%%%%%s%%%%'", key)
@@ -314,4 +320,8 @@ func RemoveDuplicates(articles *[]*Article) {
 		}
 	}
 	*articles = (*articles)[:j]
+}
+
+func GetTotalArticleCOunt() (int64) {
+	return TotalArticleCount
 }

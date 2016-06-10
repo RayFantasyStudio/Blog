@@ -16,7 +16,7 @@
 <div>
     <div class="ui main text container">
         <h1 class="ui header">[[.Owner]]的Blog</h1>
-        <p>This example shows how to use lazy loaded images, a sticky menu, and a simple text container</p>
+        <p>RayFantasyStudio官方Blog</p>
     </div>
     <div class="ui borderless main menu">
         <div class="ui text container">

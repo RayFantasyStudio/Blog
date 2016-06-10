@@ -14,10 +14,6 @@ type PageController struct {
 func (c *PageController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	var err error
-	c.Data["Articles"], err = models.GetArticles(models.Filter_Create, "", "", false)
-	if err != nil {
-		beego.Error(err)
-	}
 
 	page, err := strconv.Atoi(c.Ctx.Input.Param(":page"))
 	if err != nil {
@@ -26,5 +22,9 @@ func (c *PageController) Get() {
 
 	c.Data["Paginator"] = utils.NewPaginator("/page/%d", page, 10, 200)
 
+	c.Data["Articles"], _, err = models.GetArticles(models.Filter_Create, "", "", false,page)
+	if err != nil {
+		beego.Error(err)
+	}
 	c.TplName = "page.tpl"
 }

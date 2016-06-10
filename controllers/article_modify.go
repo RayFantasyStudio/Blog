@@ -38,24 +38,19 @@ func (c *ArticleModifyController) Post() {
 		beego.Error(err)
 	}
 	raw_id := c.Input().Get("id")
-	title := c.Input().Get("title")
-	subtitle := c.Input().Get("subtitle")
-	category := c.Input().Get("category")
-	content := c.Input().Get("content")
 	former_tags := c.Input().Get("former_tags")
 	tags := c.Input().Get("tags")
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
 		beego.Error(err)
 	}
-	article := models.Article{
-		Id:id,
-		Title:title,
-		Subtitle:subtitle,
-		Category:category,
-		Content:content,
-		Author:eUser,
+	article := models.Article{}
+	err = c.ParseForm(&article)
+	if err != nil {
+		beego.Error(err)
 	}
+	article.Author = eUser
+	article.Id = id
 	err = models.ModifyArticle(&article,former_tags,tags)
 	if err != nil {
 		beego.Error(err)

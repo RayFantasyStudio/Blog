@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
-	"time"
 	"strings"
 )
 
@@ -17,23 +16,15 @@ func (c *ArticleCreateController) Get() {
 }
 
 func (c *ArticleCreateController) Post() {
-	title := c.Input().Get("title")
-	subtitle := c.Input().Get("subtitle")
-	category := c.Input().Get("category")
-	content := c.Input().Get("content")
-	article := models.Article{
-		Title:title,
-		Subtitle:subtitle,
-		Category:category,
-		Content:content,
-		Updated:time.Now(),
-		Created:time.Now(),
-		LastReplyTime:time.Now(),
+	article := models.Article{}
+	err := c.ParseForm(&article)
+	if err != nil {
+		beego.Error(err)
 	}
 	new_category := models.Category{
 		Name:article.Category,
 	}
-	err := models.AddCategory(new_category)
+	err = models.AddCategory(new_category)
 	if err != nil {
 		beego.Error(err)
 	}
