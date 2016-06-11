@@ -200,3 +200,14 @@ func checkUserValid(user *User) error {
 
 	return nil
 }
+
+func GetUserNameById(uid int) (string,error){
+	o := orm.NewOrm()
+	qs := o.QueryTable("user").Filter("id",uid)
+	user := User{}
+	err := qs.One(&user)
+	if err != nil {
+		return "",err
+	}
+	return user.Name,err
+}

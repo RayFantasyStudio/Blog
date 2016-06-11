@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
 	"strings"
+	"time"
 )
 
 type ArticleCreateController struct {
@@ -32,6 +33,9 @@ func (c *ArticleCreateController) Post() {
 	tagstr := strings.Split(raw_tags, " ")
 	user,err := models.GetUserFromContext(c.Ctx)
 	article.Author = user
+	article.Created = time.Now()
+	article.Updated = time.Now()
+	article.LastReplyTime = time.Now()
 	err = models.AddArticle(article, tagstr)
 	if err != nil {
 		beego.Error(err)

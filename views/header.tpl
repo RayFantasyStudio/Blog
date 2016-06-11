@@ -33,26 +33,37 @@
                 [[end]]
             </div>
             <a href="#" class="item">Blog</a>
-            <a href="#" class="item">Articles</a>
-            [[if .IsLogin]]
-            <a href='[[urlfor "LoginController.Logout"]]' class="ui right item">
-                注销
-            </a>
-            [[else]]
-            <a href='[[urlfor "LoginController.Get"]]' class="ui right item">
-                登陆
-            </a>
-            [[end]]
-            <div class="ui icon input">
-                <input type="text" placeholder="Search..." id="search_content">
-                <i class="inverted circular search link icon" onclick="search()"></i>
+            <a href="/article?page=1&order=updated&desc=true" class="item">文章</a>
+            <div class="right item">
+                <div class="ui icon right input" >
+                    <input type="text" placeholder="Search..." id="search_content">
+                    <i class="inverted circular search link icon" onclick="search()"></i>
+                </div>
+                <script>
+                    function search() {
+                        var search_key = $('#search_content').val();
+                        location.assign("/search" + "?key=" + search_key);
+                    }
+                </script>
+                <div class="ui [[if .IsLogin]]red[[else]]green[[end]] buttons">
+                    [[if .IsLogin]]
+                    <a href='[[urlfor "LoginController.Logout"]]' class="ui button">
+                        注销
+                    </a>
+                    <div class="ui floating dropdown icon button">
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item" href="/admin"><i class="setting icon"></i> Blog管理</a>
+                        </div>
+                    </div>
+                    [[else]]
+                    <a class="ui button" href='[[urlfor "LoginController.Get"]]'>
+                        登陆
+                    </a>
+                    [[end]]
+
+                </div>
             </div>
-            <script>
-                function search() {
-                    var search_key = $('#search_content').val();
-                    location.assign("/search"+"?key="+search_key);
-                }
-            </script>
         </div>
     </div>
 </div>
