@@ -35,21 +35,21 @@ func (c *AdminController) Get() {
 	beego.Info(article_order_filter)
 	switch article_order_filter {
 	case "create_ascending":
-		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", true,1)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "",int64(0), true,1)
 	case "create_descending":
-		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", false,1)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "",int64(0), false,1)
 	case "update_ascending":
-		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", true,1)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "",int64(0), true,1)
 	case "update_descending":
-		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", false,1)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "",int64(0), false,1)
 	case "last_reply_time_ascending":
-		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", true,1)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "",int64(0), true,1)
 	case "last_reply_time_descending":
-		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", false,1)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "",int64(0), false,1)
 	case "view_count_ascending":
-		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", true,1)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "",int64(0), true,1)
 	case "view_count_descending":
-		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", false,1)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "",int64(0), false,1)
 	}
 	if err != nil {
 		beego.Error(err)

@@ -38,10 +38,16 @@ func (c *ArticleController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	uid,err := c.GetInt64("by_uid")
+	if err != nil {
+		beego.Error(err)
+	}
 	beego.Info("the page is ",page,"the order is ",order_by,"   ",desc)
-	c.Data["Paginator"] = utils.NewPaginator("/article?page=%d&order=create&desc=true", page, models.ArticlePerPageLimit, models.GetTotalArticleCount())
+
+
+	c.Data["Paginator"] = utils.NewPaginator("/article?page=%d&order=created&desc=true&by_uid="+strconv.FormatInt(uid,10), page, models.ArticlePerPageLimit, models.GetTotalArticleCount())
 	var articles []*models.Article
-	articles,_,err = models.GetArticles(order_by,"","",desc,page)
+	articles,_,err = models.GetArticles(order_by,"","",uid,desc,page)
 	c.Data["Articles"] = articles
 	author_name := make([]string,len(articles))
 	for index,x := range articles{

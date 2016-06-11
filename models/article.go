@@ -14,6 +14,7 @@ const (
 	Filter_Update = "updated"
 	Filter_ViewCount = "view_count"
 	Filter_LastReplyTime = "last_reply_time"
+	Filter_UserName = "author"
 
 	ArticlePerPageLimit = 10
 )
@@ -42,7 +43,7 @@ func initArticle() {
 	}
 }
 
-func GetArticles(order_key string, category, tag string, inverted bool, page int) (articles []*Article, article_count int, err error) {
+func GetArticles(order_key string, category, tag string, uid  int64, inverted bool, page int) (articles []*Article, article_count int, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
 	switch order_key {
@@ -52,6 +53,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 		}
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
+		}
+		if uid > 0 {
+			query = query.Filter("author",uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
@@ -67,6 +71,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
 		}
+		if uid > 0 {
+			query = query.Filter("author",uid)
+		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
@@ -81,6 +88,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
 		}
+		if uid > 0 {
+			query = query.Filter("author",uid)
+		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		} else {
@@ -94,6 +104,9 @@ func GetArticles(order_key string, category, tag string, inverted bool, page int
 		}
 		if len(tag) > 0 {
 			query = query.Filter("tag", tag)
+		}
+		if uid > 0 {
+			query = query.Filter("author",uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
