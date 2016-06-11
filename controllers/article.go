@@ -17,6 +17,7 @@ type articleItem struct{
 	authorName string
 }
 func (c *ArticleController) Get() {
+	var article_count int
 	op := c.Input().Get("op")
 	if op == "del" {
 		id, err := strconv.ParseInt(c.Input().Get("id"), 10, 64)
@@ -43,12 +44,16 @@ func (c *ArticleController) Get() {
 		beego.Error(err)
 	}
 	beego.Info("the page is ",page,"the order is ",order_by,"   ",desc)
-
-
-	c.Data["Paginator"] = utils.NewPaginator("/article?page=%d&order=created&desc=true&by_uid="+strconv.FormatInt(uid,10), page, models.ArticlePerPageLimit, models.GetTotalArticleCount())
 	var articles []*models.Article
-	articles,_,err = models.GetArticles(order_by,"","",uid,desc,page)
+	articles, article_count,err = models.GetArticles(order_by,"","",uid,desc,page)
+	if err != nil {
+		beego.Error(err)
+	}
+	beego.Info("the result of get articles = ",article_count)
 	c.Data["Articles"] = articles
+
+	c.Data["Paginator"] = utils.NewPaginator("/article?page=%d&order=created&desc=true&by_uid="+strconv.FormatInt(uid,10), page, models.ArticlePerPageLimit, int64(article_count))
+
 	author_name := make([]string,len(articles))
 	for index,x := range articles{
 		author_name[index],err = models.GetUserNameById(x.Author.Id)

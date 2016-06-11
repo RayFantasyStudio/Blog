@@ -55,7 +55,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			query = query.Filter("tag", tag)
 		}
 		if uid > 0 {
-			query = query.Filter("author",uid)
+			query = query.Filter("author", uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
@@ -63,6 +63,16 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			_, err = query.OrderBy(Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
+		if uid > 0 {
+			qs_user := o.QueryTable("article").Filter("Author",uid)
+			x,err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ",article_count)
+
+		}
 		return articles, article_count, err
 	case Filter_LastReplyTime:
 		if len(category) > 0 {
@@ -72,7 +82,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			query = query.Filter("tag", tag)
 		}
 		if uid > 0 {
-			query = query.Filter("author",uid)
+			query = query.Filter("author", uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
@@ -80,6 +90,16 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			_, err = query.OrderBy(Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
+		if uid > 0 {
+			qs_user := o.QueryTable("article").Filter("Author",uid)
+			x,err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ",article_count)
+
+		}
 		return articles, article_count, err
 	case Filter_ViewCount:
 		if len(category) > 0 {
@@ -89,7 +109,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			query = query.Filter("tag", tag)
 		}
 		if uid > 0 {
-			query = query.Filter("author",uid)
+			query = query.Filter("author", uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
@@ -97,6 +117,16 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			_, err = query.OrderBy(Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
+		if uid > 0 {
+			qs_user := o.QueryTable("article").Filter("Author",uid)
+			x,err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ",article_count)
+
+		}
 		return articles, article_count, err
 	case Filter_Update:
 		if len(category) > 0 {
@@ -106,7 +136,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			query = query.Filter("tag", tag)
 		}
 		if uid > 0 {
-			query = query.Filter("author",uid)
+			query = query.Filter("author", uid)
 		}
 		if inverted {
 			_, err = query.OrderBy("-" + Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
@@ -114,8 +144,19 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			_, err = query.OrderBy(Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
 		article_count = len(articles)
+		if uid > 0 {
+			qs_user := o.QueryTable("article").Filter("Author",uid)
+			x,err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ",article_count)
+
+		}
 		return articles, article_count, err
 	}
+
 	_, err = query.Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 	article_count = len(articles)
 	return articles, article_count, err
