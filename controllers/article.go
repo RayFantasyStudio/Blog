@@ -43,9 +43,20 @@ func (c *ArticleController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-	beego.Info("the page is ",page,"the order is ",order_by,"   ",desc)
+	category := c.GetString("cate")
+
+	c.Data["Category_tmp"] = category
+	c.Data["Order_tmp"] = order_by
+	c.Data["User_tmp"] = uid
+	c.Data["Desc_tmp"] = desc
+
+
+
+
+
+	beego.Info("the page is ",page,"the order is ",order_by,"   ","desc = ",desc,"cate = ",category)
 	var articles []*models.Article
-	articles, article_count,err = models.GetArticles(order_by,"","",uid,desc,page)
+	articles, article_count,err = models.GetArticles(order_by,category,"",uid,desc,page)
 	if err != nil {
 		beego.Error(err)
 	}

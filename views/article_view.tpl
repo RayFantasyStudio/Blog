@@ -45,18 +45,35 @@
                     <div class="content">
                         <a class="author">[[.UserName]]</a>
                         <div class="metadata">
-                            <span class="date">[[.Time]]</span>
+                            <span class="date">[[.Time | SinceTime]]</span>
                         </div>
+                        [[if lt 0 .QuoteReplyId]]
+                        [[$reply_tmp :=  index $.quote_map .QuoteReplyId]]
+                        <div class="ui message">
+                            <div class="header">[[$reply_tmp.UserName]]</div>
+                            <p>[[$reply_tmp.Content]]</p>
+                        </div>
+                        [[end]]
                         <div class="text">[[.Content]]</div>
                         <div class="actions">
-                            <a class="reply">回复</a>
+                            <a class="reply" href="/article/view?id=[[$aid]]&quote_rid=[[.Id]]">回复</a>
                             <a class="reply" href="/article/view?op=delrpy&rid=[[.Id]]&aid=[[$aid]]">删除回复</a>
                         </div>
                     </div>
                 </div>
                 [[end]]
-
+                <div class="ui divider"></div>
+                [[if lt 0 .quote_rid]]
+                [[with .quote_reply]]
+                <div class="ui message">
+                    <i class="close icon"></i>
+                    <div class="header"><span style="color: green">回复</span>[[.UserName]]</div>
+                    <p>[[.Content]]</p>
+                </div>
+                [[end]]
+                [[end]]
                 <form class="ui reply form" action="/article/view" method="post">
+                    <input type="hidden" name="quote_reply_id" value="[[.quote_reply.Id]]">
                     <input type="hidden" name="aid" value="[[.Article.Id]]">
                     <div class="fields">
                         <input type="text" name="reply_name" placeholder="请输入昵称">

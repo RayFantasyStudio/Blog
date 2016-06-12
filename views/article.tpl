@@ -22,13 +22,13 @@
                     </a>
                 </h4></td>
             <td>
-                [[$article.Title]]
+                <a href="/article/view?id=[[$article.Id]]">[[$article.Title]]</a>
             </td>
             <td>
                 [[$article.Subtitle]]
             </td>
             <td>
-                [[$article.Category]]
+                <a href="/article?page=1&order=[[$.Order_tmp]]&desc=false&by_uid=[[$.User_tmp]]&cate=[[$article.Category]]">[[$article.Category]]</a>
             </td>
             <td>
                 [[$article.Updated]]

@@ -33,7 +33,7 @@
                 [[end]]
             </div>
             <a href="/" class="item">Blog</a>
-            <a href="/article?page=1&order=updated&desc=true&by_uid=0" class="item">文章</a>
+            <a href="/article?page=1&order=updated&desc=true&by_uid=0&cate=" class="item">文章</a>
             <div class="right item">
                 <div class="ui icon right input" >
                     <input type="text" placeholder="Search..." id="search_content">

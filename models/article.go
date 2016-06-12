@@ -46,6 +46,7 @@ func initArticle() {
 func GetArticles(order_key string, category, tag string, uid  int64, inverted bool, page int) (articles []*Article, article_count int, err error) {
 	o := orm.NewOrm()
 	query := o.QueryTable("article")
+	article_count = int(GetTotalArticleCount())
 	switch order_key {
 	case Filter_Create:
 		if len(category) > 0 {
@@ -62,16 +63,34 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 		} else {
 			_, err = query.OrderBy(Filter_Create).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
-		article_count = len(articles)
+
 		if uid > 0 {
-			qs_user := o.QueryTable("article").Filter("Author",uid)
-			x,err := qs_user.Count()
+			qs_user := o.QueryTable("article").Filter("Author", uid)
+			x, err := qs_user.Count()
 			if err != nil {
 				return articles, article_count, err
 			}
 			article_count = int(x)
-			beego.Info("The user article count = ",article_count)
+			beego.Info("The user article count = ", article_count)
 
+		}
+		if len(category) > 0 {
+			qs_user := o.QueryTable("article").Filter("Category", category)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
+		}
+		if uid >0 && len(category) > 0{
+			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
 		}
 		return articles, article_count, err
 	case Filter_LastReplyTime:
@@ -89,16 +108,33 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 		} else {
 			_, err = query.OrderBy(Filter_LastReplyTime).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
-		article_count = len(articles)
 		if uid > 0 {
-			qs_user := o.QueryTable("article").Filter("Author",uid)
-			x,err := qs_user.Count()
+			qs_user := o.QueryTable("article").Filter("Author", uid)
+			x, err := qs_user.Count()
 			if err != nil {
 				return articles, article_count, err
 			}
 			article_count = int(x)
-			beego.Info("The user article count = ",article_count)
+			beego.Info("The user article count = ", article_count)
 
+		}
+		if len(category) > 0 {
+			qs_user := o.QueryTable("article").Filter("Category", category)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
+		}
+		if uid >0 && len(category) > 0{
+			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
 		}
 		return articles, article_count, err
 	case Filter_ViewCount:
@@ -116,16 +152,33 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 		} else {
 			_, err = query.OrderBy(Filter_ViewCount).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
-		article_count = len(articles)
 		if uid > 0 {
-			qs_user := o.QueryTable("article").Filter("Author",uid)
-			x,err := qs_user.Count()
+			qs_user := o.QueryTable("article").Filter("Author", uid)
+			x, err := qs_user.Count()
 			if err != nil {
 				return articles, article_count, err
 			}
 			article_count = int(x)
-			beego.Info("The user article count = ",article_count)
+			beego.Info("The user article count = ", article_count)
 
+		}
+		if len(category) > 0 {
+			qs_user := o.QueryTable("article").Filter("Category", category)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
+		}
+		if uid >0 && len(category) > 0{
+			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
 		}
 		return articles, article_count, err
 	case Filter_Update:
@@ -143,16 +196,33 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 		} else {
 			_, err = query.OrderBy(Filter_Update).Limit(ArticlePerPageLimit).Offset((page - 1) * ArticlePerPageLimit).All(&articles)
 		}
-		article_count = len(articles)
 		if uid > 0 {
-			qs_user := o.QueryTable("article").Filter("Author",uid)
-			x,err := qs_user.Count()
+			qs_user := o.QueryTable("article").Filter("Author", uid)
+			x, err := qs_user.Count()
 			if err != nil {
 				return articles, article_count, err
 			}
 			article_count = int(x)
-			beego.Info("The user article count = ",article_count)
+			beego.Info("The user article count = ", article_count)
 
+		}
+		if len(category) > 0 {
+			qs_user := o.QueryTable("article").Filter("Category", category)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
+		}
+		if uid >0 && len(category) > 0{
+			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
+			x, err := qs_user.Count()
+			if err != nil {
+				return articles, article_count, err
+			}
+			article_count = int(x)
+			beego.Info("The user article count = ", article_count)
 		}
 		return articles, article_count, err
 	}

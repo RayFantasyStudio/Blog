@@ -44,3 +44,10 @@ func GetAdminReplies() ([]*Reply, error) {
 	_, err := qs.All(&replies)
 	return replies, err
 }
+func GetReplyById(rid int64) (Reply,error){
+	o := orm.NewOrm()
+	qs := o.QueryTable("reply").Filter("id",rid)
+	reply := Reply{}
+	err := qs.One(&reply)
+	return reply,err
+}
