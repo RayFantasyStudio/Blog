@@ -1,5 +1,6 @@
 [[template "header" .]]
 <div class="ui" style="margin: 0 5% 0 5%;">
+    <a class="positive ui button" href="/article/create">新建文章</a>
     <table class="ui  basic striped fixed celled  table" style="background: white" >
         <thead>
         <tr>
@@ -22,7 +23,7 @@
                     </a>
                 </h4></td>
             <td>
-                <a href="/article/view?id=[[$article.Id]]">[[$article.Title]]</a>
+                <a href="/article/view?id=[[$article.Id]]&quote_rid=0">[[$article.Title]]</a>
             </td>
             <td>
                 [[$article.Subtitle]]

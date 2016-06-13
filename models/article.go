@@ -83,7 +83,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			article_count = int(x)
 			beego.Info("The user article count = ", article_count)
 		}
-		if uid >0 && len(category) > 0{
+		if uid > 0 && len(category) > 0 {
 			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
 			x, err := qs_user.Count()
 			if err != nil {
@@ -127,7 +127,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			article_count = int(x)
 			beego.Info("The user article count = ", article_count)
 		}
-		if uid >0 && len(category) > 0{
+		if uid > 0 && len(category) > 0 {
 			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
 			x, err := qs_user.Count()
 			if err != nil {
@@ -171,7 +171,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			article_count = int(x)
 			beego.Info("The user article count = ", article_count)
 		}
-		if uid >0 && len(category) > 0{
+		if uid > 0 && len(category) > 0 {
 			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
 			x, err := qs_user.Count()
 			if err != nil {
@@ -215,7 +215,7 @@ func GetArticles(order_key string, category, tag string, uid  int64, inverted bo
 			article_count = int(x)
 			beego.Info("The user article count = ", article_count)
 		}
-		if uid >0 && len(category) > 0{
+		if uid > 0 && len(category) > 0 {
 			qs_user := o.QueryTable("article").Filter("Category", category).Filter("Author", uid)
 			x, err := qs_user.Count()
 			if err != nil {
@@ -342,20 +342,25 @@ func ModifyArticle(article *Article, raw_former_tag string, raw_tags string) err
 	//处理标签
 	former_tag := strings.Split(raw_former_tag, " ")
 	tags := strings.Split(raw_tags, " ")
+	beego.Info(former_tag)
+	beego.Info(tags)
 	var deleted_tag, created_tag []string
+	var str_tmp string
 	var flag bool = false
-	for x, _ := range former_tag {
-		for y, _ := range tags {
-			if former_tag[x] == tags[y] {
+	for _, x := range tags {
+		for _, y := range former_tag {
+			if y == x {
 				flag = true
+				str_tmp = y
 				break
 			}
 		}
 		if !flag {
-			deleted_tag = append(deleted_tag, former_tag[x])
+			deleted_tag = append(deleted_tag,str_tmp)
 			flag = false
 		}
 	}
+	beego.Info("deleta tag list = ",deleted_tag)
 
 	for _, x := range tags {
 		for a, y := range former_tag {

@@ -17,6 +17,7 @@ type articleItem struct{
 	authorName string
 }
 func (c *ArticleController) Get() {
+	initHeaderFooterData(&c.Controller, owner + "的Blog")
 	var article_count int
 	op := c.Input().Get("op")
 	if op == "del" {

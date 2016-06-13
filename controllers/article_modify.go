@@ -33,6 +33,7 @@ func (c *ArticleModifyController) Get() {
 }
 
 func (c *ArticleModifyController) Post() {
+
 	eUser,err := models.GetUserFromContext(c.Ctx)
 	if err != nil {
 		beego.Error(err)

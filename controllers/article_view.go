@@ -35,6 +35,7 @@ func (c *ArticleViewController) Get() {
 		beego.Error(err)
 	}
 	c.Data["Tags"] = tags
+	beego.Info(tags)
 
 
 	//引用回复
@@ -59,7 +60,6 @@ func (c *ArticleViewController) Get() {
 			quote_map[x.QuoteReplyId] = reply_tmp
 		}
 	}
-	beego.Info(quote_map)
 	c.Data["quote_map"] = quote_map
 
 	//删除评论

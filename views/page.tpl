@@ -4,7 +4,7 @@
         [[range $index, $article := .Articles]]
         <div class="item">
             <div class="content">
-                <a class="header">[[$article.Title]]</a>
+                <a class="header" href="/article/view?id=[[$article.Id]]&quote_rid=0">[[$article.Title]]</a>
                 <div class="meta">
                     <a>[[$article.Created | SinceTime]]</a>
                     <a>Category</a>
@@ -17,7 +17,7 @@
                     </script>
                 </div>
                 <div class="extra">
-                    <a class="ui right floated primary button" href="/article/view?id=[[$article.Id]]">
+                    <a class="ui right floated primary button" href="/article/view?id=[[$article.Id]]&quote_rid=0">
                         详情
                         <i class="right chevron icon"></i>
                     </a>
