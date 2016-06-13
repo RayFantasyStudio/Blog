@@ -6,25 +6,17 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/validation"
 	"github.com/astaxie/beego"
-	"time"
 	"github.com/garyburd/redigo/redis"
 	"github.com/astaxie/beego/context"
-	"encoding/json"
 )
 
-// 登陆有效期60天
-const UserTokenPeriod = 60 * 24 * time.Hour
+// 登陆有效期60天         day  hour  min  sec
+const UserTokenPeriod_s = 60 * 24 * 60 * 60
 
 type User struct {
-	Id   int `form:"_" json:"id"`
-	Name string `orm:"size(16);unique" form:"name" json:"name" valid:"Required"`
-	Pwd  string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)"`
-}
-
-type userToken struct {
-	User       User
-	ExpireTime time.Time
-	IsExpire   bool
+	Id   int `form:"_" json:"id" redis:"id"`
+	Name string `orm:"size(16);unique" form:"name" json:"name" valid:"Required" redis:"name"`
+	Pwd  string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)" redis:"pwd"`
 }
 
 var UserTokenPrefix string
@@ -75,9 +67,7 @@ func (u *User) Login() (token string, err error) {
 	}
 
 	token = generateToken()
-	userToken := &userToken{User:user, ExpireTime:time.Now().Add(UserTokenPeriod)}
-	err = userToken.store(redisPool.Get(), token)
-	if err != nil {
+	if err = storeUserToToken(&user, token); err != nil {
 		return
 	}
 
@@ -106,27 +96,7 @@ func generateToken() string {
 
 // 根据Token取得User
 func GetUserByToken(token string) (user *User, err error) {
-	conn := redisPool.Get()
-
-	userToken, err := getUserToken(conn, token)
-	if err != nil {
-		return
-	}
-
-	if userToken.IsExpire {
-		err = fmt.Errorf("Token:\"%s\"已过期", token)
-		return
-	}
-
-	if userToken.ExpireTime.Before(time.Now()) {
-		userToken.IsExpire = true
-		userToken.store(conn, token)
-		err = fmt.Errorf("Token:\"%s\"已过期", token)
-		return
-	}
-
-	user = &userToken.User
-
+	user, err = getUserFromRedis(token)
 	return
 }
 
@@ -139,49 +109,40 @@ func GetUserFromContext(ctx *context.Context) (user *User, err error) {
 	return
 }
 
-func ExpireToken(token string) error {
+func DelUserToken(token string) error {
+	tokenStr := UserTokenPrefix + token
 	conn := redisPool.Get()
-	userToken, err := getUserToken(conn, token)
-	if err != nil {
-		return err
-	}
-	userToken.IsExpire = true
-	err = userToken.store(conn, token)
-	if err != nil {
-		return err
-	}
-	return nil
+	_, err := conn.Do("DEL", tokenStr)
+	return err
 }
 
-func (ut *userToken) store(conn redis.Conn, token string) (err error) {
+func storeUserToToken(u *User, token string) (err error) {
+	conn := redisPool.Get()
 	tokenStr := UserTokenPrefix + token
 
-	serialized, err := json.Marshal(ut)
-	if err != nil {
+	if _, err = conn.Do("HMSET", redis.Args{}.Add(tokenStr).AddFlat(*u)...); err != nil {
 		return
 	}
-	conn.Do("set", tokenStr, serialized)
+
+	if _, err = conn.Do("EXPIRE", tokenStr, UserTokenPeriod_s); err != nil {
+		return
+	}
 
 	return
 }
 
-func getUserToken(conn redis.Conn, token string) (ut *userToken, err error) {
+func getUserFromRedis(token string) (u *User, err error) {
+	conn := redisPool.Get()
 	tokenStr := UserTokenPrefix + token
-	raw, err := conn.Do("get", tokenStr)
+
+	u = new(User)
+
+	values, err := redis.Values(conn.Do("HGETALL", tokenStr))
 	if err != nil {
 		return
 	}
-	serialized, ok := raw.([]byte)
-	if !ok {
-		err = fmt.Errorf("UserToken转换失败")
-		return
-	}
 
-	ut = new(userToken)
-	if err = json.Unmarshal(serialized, ut); err != nil {
-		err = fmt.Errorf("UserToken转换失败")
-		return
-	}
+	redis.ScanStruct(values, u)
 
 	return
 }
@@ -201,13 +162,13 @@ func checkUserValid(user *User) error {
 	return nil
 }
 
-func GetUserNameById(uid int) (string,error){
+func GetUserNameById(uid int) (string, error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable("user").Filter("id",uid)
+	qs := o.QueryTable("user").Filter("id", uid)
 	user := User{}
 	err := qs.One(&user)
 	if err != nil {
-		return "",err
+		return "", err
 	}
-	return user.Name,err
+	return user.Name, err
 }
