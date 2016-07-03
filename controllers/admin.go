@@ -185,10 +185,24 @@ func (c *AdminController) Post() {
 			extension := filepath.Ext(fh.Filename)
 			fh.Filename = user_name + "_avatar" + extension
 			attachment = fh.Filename
-			err = c.SaveToFile("avatar", path.Join("static", "img","user_avatar", attachment))
+			err = c.SaveToFile("avatar", path.Join("static", "img", "user_avatar", attachment))
 			if err != nil {
 				beego.Error(err)
 			}
+		}
+		//处理用户名、密码
+
+		user,err := models.GetUserFromContext(c.Ctx)
+		if err != nil {
+			beego.Error(err)
+		}
+		uid := int64(user.Id)
+		username :=  c.Input().Get("username")
+		pwd := c.Input().Get("pwd")
+		beego.Info("The current user has been change \n username : ",username,"\n pwd :",pwd,"\nid : ",uid)
+		err = models.ModifyUserInfo(uid,username,pwd)
+		if err != nil {
+			beego.Error(err)
 		}
 	}
 	c.Redirect("/admin", 302)

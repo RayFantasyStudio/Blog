@@ -14,7 +14,7 @@
 <div id="main">
     <div class="ui inverted vertical tabs menu" id="nav">
         <a class="item" style="">
-            <img src="/static/img/user_avatar/[[.UserName]]_avatar.png"  style="width: 200px;height: 200px" id="nav_user_avatar">
+            <img src="/static/img/user_avatar/[[.UserName]]_avatar.png"  style="width: 200px;height: 200px" id="nav_user_avatar" onerror="javascript:this.src='/static/img/user_avatar/user.png'">
         </a>
         <a class="item">
             <h4>[[.UserName]]</h4>
@@ -34,7 +34,7 @@
         <a class="item" data-tab="user">
             <h4>账户信息更改</h4>
         </a>
-        <a class="item" id="logout-btn">
+        <a class="item" id="logout-btn" href='[[urlfor "LoginController.Logout"]]' >
             <h4>登出</h4>
         </a>
     </div>

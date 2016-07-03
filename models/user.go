@@ -172,3 +172,16 @@ func GetUserNameById(uid int) (string, error) {
 	}
 	return user.Name, err
 }
+func ModifyUserInfo(uid int64,username string,pwd string) error{
+	o := orm.NewOrm()
+	qs := o.QueryTable("user").Filter("Id",uid)
+	var user User
+	err := qs.One(&user)
+	if err != nil {
+		return err
+	}
+	user.Name = username
+	user.Pwd = pwd
+	o.Update(&user)
+	return err
+}

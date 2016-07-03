@@ -22,7 +22,7 @@
                 <div class="ui divider"></div>
                 <div class="field">
                     <h4 class="ui image header">
-                        <img src="/static/img/user_avatar/[[$author_article]]_avatar.png" class="ui mini rounded image">
+                        <img src="/static/img/user_avatar/[[$author_article]]_avatar.png" class="ui mini rounded image" onerror="javascript:this.src='/static/img/user_avatar/user.png'">
                        [[$author_article]]
                     </h4>
                 </div>
