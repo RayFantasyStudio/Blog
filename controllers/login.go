@@ -49,7 +49,7 @@ func (c *LoginController) Post() {
 
 func (c *LoginController) Logout() {
 	token := c.Ctx.GetCookie("token")
-	models.ExpireToken(token)
+	models.DelUserToken(token)
 
 	c.Ctx.SetCookie("token", "")
 
