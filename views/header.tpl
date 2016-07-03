@@ -26,6 +26,9 @@
     <div class="ui borderless main menu">
         <div class="ui text container">
             <div href="#" class="header item">
+                <img src="/static/img/user_avatar/[[.User.Name]]_avatar.png" class="ui centered mini image">
+            </div>
+            <div href="#" class="header item">
                 [[if .IsLogin]]
                 [[.User.Name]]
                 [[else]]
@@ -35,7 +38,7 @@
             <a href="/" class="item">Blog</a>
             <a href="/article?page=1&order=updated&desc=true&by_uid=0&cate=" class="item">文章</a>
             <div class="right item">
-                <div class="ui icon right input" >
+                <div class="ui icon right input">
                     <input type="text" placeholder="Search..." id="search_content">
                     <i class="inverted circular search link icon" onclick="search()"></i>
                 </div>

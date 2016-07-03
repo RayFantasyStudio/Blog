@@ -14,10 +14,10 @@
 <div id="main">
     <div class="ui inverted vertical tabs menu" id="nav">
         <a class="item" style="">
-            我是头像
+            <img src="/static/img/user_avatar/[[.UserName]]_avatar.png"  style="width: 200px;height: 200px" id="nav_user_avatar">
         </a>
         <a class="item">
-            <h4>userName</h4>
+            <h4>[[.UserName]]</h4>
         </a>
         <a class="item" data-tab="article">
             <h4>文章管理</h4>
@@ -53,6 +53,7 @@
 
         </div>
         <div class="ui tab" data-tab="user">
+            [[template "admin_setting" .]]
         </div>
     </div>
 </div>

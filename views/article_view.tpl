@@ -2,7 +2,9 @@
 <script src="//cdn.bootcss.com/marked/0.3.5/marked.js"></script>
 <script src="//cdn.bootcss.com/marked/0.3.5/marked.min.js"></script>
 <div class="ui  container">
+    [[$author_article := .author]]
     [[$tags := .Tags]]
+    [[$IsLogin := .isLogin]]
     [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
@@ -11,7 +13,7 @@
                 </div>
             </a>
             <div class="ui">
-                <div class="field">
+                <div class="field" style="margin-bottom: 3px">
                     <h1>[[.Title]]</h1>
                 </div>
                 <div class="field">
@@ -19,17 +21,25 @@
                 </div>
                 <div class="ui divider"></div>
                 <div class="field">
+                    <h4 class="ui image header">
+                        <img src="/static/img/user_avatar/[[$author_article]]_avatar.png" class="ui mini rounded image">
+                       [[$author_article]]
+                    </h4>
+                </div>
+                <div class="field">
                     <label class="ui green label">标签</label>[[range $tags]]<label class="ui label">[[.Name]]</label>[[end]]
                 </div>
-                <div class="field" id="markdown-content">
+                <div class="field" id="markdown-content" style="padding: 50px">
                     <script>
                         document.getElementById('markdown-content').innerHTML =
                                 '[[.Content]]'
                         ;
                     </script>
                 </div>
+                [[if $IsLogin]]
                 <a class="ui  green button" href="/article/modify?id=[[.Id]]">修改</a>
                 <a class="ui red button" href="/article?op=del&id=[[.Id]]">删除</a>
+                [[end]]
             </div>
         </div>
         [[end]]
@@ -57,7 +67,9 @@
                         <div class="text">[[.Content]]</div>
                         <div class="actions">
                             <a class="reply" href="/article/view?id=[[$aid]]&quote_rid=[[.Id]]">回复</a>
+                            [[if $IsLogin]]
                             <a class="reply" href="/article/view?op=delrpy&rid=[[.Id]]&aid=[[$aid]]">删除回复</a>
+                            [[end]]
                         </div>
                     </div>
                 </div>

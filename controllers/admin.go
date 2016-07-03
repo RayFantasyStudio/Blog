@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/RayFantasyStudio/blog/models"
 	"strconv"
+	"path"
+	"path/filepath"
 )
 
 //admin操作op
@@ -14,6 +16,8 @@ const (
 	tag_rename = "tag_rename"
 	tag_delete = "tag_delete"
 	reply_delete = "reply_delete"
+
+	account_setting = "account_setting"
 
 	article_filter = "article_filter"
 	category_filter = "category_filter"
@@ -35,21 +39,21 @@ func (c *AdminController) Get() {
 	beego.Info(article_order_filter)
 	switch article_order_filter {
 	case "create_ascending":
-		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "",int64(0), true,1)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", int64(0), true, 1)
 	case "create_descending":
-		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "",int64(0), false,1)
+		articles, _, err = models.GetArticles(models.Filter_Create, article_category_filter.(string), "", int64(0), false, 1)
 	case "update_ascending":
-		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "",int64(0), true,1)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", int64(0), true, 1)
 	case "update_descending":
-		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "",int64(0), false,1)
+		articles, _, err = models.GetArticles(models.Filter_Update, article_category_filter.(string), "", int64(0), false, 1)
 	case "last_reply_time_ascending":
-		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "",int64(0), true,1)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", int64(0), true, 1)
 	case "last_reply_time_descending":
-		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "",int64(0), false,1)
+		articles, _, err = models.GetArticles(models.Filter_LastReplyTime, article_category_filter.(string), "", int64(0), false, 1)
 	case "view_count_ascending":
-		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "",int64(0), true,1)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", int64(0), true, 1)
 	case "view_count_descending":
-		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "",int64(0), false,1)
+		articles, _, err = models.GetArticles(models.Filter_ViewCount, article_category_filter.(string), "", int64(0), false, 1)
 	}
 	if err != nil {
 		beego.Error(err)
@@ -85,6 +89,12 @@ func (c *AdminController) Get() {
 		beego.Error(err)
 	}
 	c.Data["Tags"] = tags
+
+	user, err := models.GetUserFromContext(c.Ctx)
+	if err != nil {
+		beego.Error(err)
+	}
+	c.Data["UserName"] = user.Name
 
 	c.TplName = "admin.tpl"
 }
@@ -163,6 +173,23 @@ func (c *AdminController) Post() {
 	case category_filter:
 		c.SetSession("category_order", c.Input().Get("category_order"))
 		c.Redirect("/admin", 302)
+	case account_setting:
+		user_name := c.Input().Get("user_name")
+		_, fh, err := c.GetFile("avatar")
+		if err != nil {
+			beego.Error(err)
+		}
+		beego.Info("Saving................")
+		var attachment string
+		if fh != nil {
+			extension := filepath.Ext(fh.Filename)
+			fh.Filename = user_name + "_avatar" + extension
+			attachment = fh.Filename
+			err = c.SaveToFile("avatar", path.Join("static", "img","user_avatar", attachment))
+			if err != nil {
+				beego.Error(err)
+			}
+		}
 	}
 	c.Redirect("/admin", 302)
 }

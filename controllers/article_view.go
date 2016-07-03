@@ -13,6 +13,13 @@ type ArticleViewController struct {
 
 func (c *ArticleViewController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
+	eUser,err := models.GetUserFromContext(c.Ctx)
+	if err != nil {
+		beego.Error(err)
+	}
+	if eUser != nil{
+		c.Data["isLogin"] = true
+	}
 	raw_id := c.Input().Get("id")
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
@@ -36,6 +43,13 @@ func (c *ArticleViewController) Get() {
 	}
 	c.Data["Tags"] = tags
 	beego.Info(tags)
+	var author string
+	author,err = models.GetUserNameById(article.Author.Id)
+	if err != nil {
+		beego.Error(err)
+	}
+	c.Data["author"] = author
+	beego.Info("author = ",author)
 
 
 	//引用回复

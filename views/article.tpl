@@ -17,9 +17,9 @@
         <tr>
             <td>
                 <h4 class="ui image header">
-                    <img src="/images/avatar2/small/lena.png" class="ui mini rounded image">
+                    <img src="/static/img/user_avatar/[[index $authors $index]]_avatar.png" class="ui mini rounded image">
                     <a class="content" href="/article?page=1&order=created&desc=true&by_uid=[[$article.Author.Id]]">[[index $authors $index]]
-                        <div class="sub header">人力资源 </div>
+                        <div class="sub header">    </div>
                     </a>
                 </h4></td>
             <td>

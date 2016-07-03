@@ -16,7 +16,7 @@
 <div class="ui middle aligned center aligned grid">
     <div class="column">
         <h2 class="ui teal image header">
-            <img src="/static/img/logo.png" class="image">
+            <img src="/static/img/RFS_logo_bright.png" class="image">
             <div class="content">
                 登录你的账户
             </div>

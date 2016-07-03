@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="ui inverted section divider"></div>
-        <img src="http://semantic-ui.com/examples/assets/images/logo.png" class="ui centered mini image">
+        <img src="/static/img/RFS_logo_dark.png" class="ui centered mini image">
         <div class="ui horizontal inverted small divided link list">
             <a class="item" href="#">Site Map</a>
             <a class="item" href="#">Contact Us</a>
