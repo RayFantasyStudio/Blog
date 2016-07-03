@@ -21,8 +21,12 @@ func initHeaderFooterData(c *beego.Controller, title string) (user *models.User,
 		if user, err = models.GetUserByToken(token); err != nil {
 			beego.Error(err)
 		} else {
-			c.Data["IsLogin"] = user != nil
+			c.Data["IsLogin"] = true
 			c.Data["User"] = user
+			var avatar_path string
+			avatar_path, err = models.GetUserAvatar(int64(user.Id))
+			c.Data["avatar_path"] = avatar_path
+			beego.Info(avatar_path)
 		}
 	}
 
@@ -30,10 +34,6 @@ func initHeaderFooterData(c *beego.Controller, title string) (user *models.User,
 	if n, ok := flash.Data["notice"]; ok {
 		c.Data["Message"] = n
 	}
-	var avatar_path string
-	avatar_path,err = models.GetUserAvatar(int64(user.Id))
-	c.Data["avatar_path"] = avatar_path
-	beego.Info(avatar_path)
 	return
 }
 
