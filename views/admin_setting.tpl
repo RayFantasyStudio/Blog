@@ -15,7 +15,7 @@
         </div>
         <div class="field">
             <label>修改头像</label>
-            <img src="/static/img/user_avatar/[[.UserName]]_avatar.png" style="width: 100px;height: 100px"
+            <img src="[[.avatar_path]]" style="width: 100px;height: 100px"
                  onerror="javascript:this.src='/static/img/user_avatar/user.png'">
             <input type="file" name="avatar">
             <input type="hidden" name="user_name" value="[[.UserName]]">

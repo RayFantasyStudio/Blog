@@ -14,9 +14,10 @@ import (
 const UserTokenPeriod_s = 60 * 24 * 60 * 60
 
 type User struct {
-	Id   int `form:"_" json:"id" redis:"id"`
-	Name string `orm:"size(16);unique" form:"name" json:"name" valid:"Required" redis:"name"`
-	Pwd  string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)" redis:"pwd"`
+	Id     int `form:"_" json:"id" redis:"id"`
+	Name   string `orm:"size(16);unique" form:"name" json:"name" valid:"Required" redis:"name"`
+	Pwd    string `orm:"size(32)" form:"pwd" json:"_" valid:"MinSize(8);MaxSize(32)" redis:"pwd"`
+	Avatar string
 }
 
 var UserTokenPrefix string
@@ -172,9 +173,9 @@ func GetUserNameById(uid int) (string, error) {
 	}
 	return user.Name, err
 }
-func ModifyUserInfo(uid int64,username string,pwd string) error{
+func ModifyUserInfo(uid int64, username string, pwd string) error {
 	o := orm.NewOrm()
-	qs := o.QueryTable("user").Filter("Id",uid)
+	qs := o.QueryTable("user").Filter("Id", uid)
 	var user User
 	err := qs.One(&user)
 	if err != nil {
@@ -184,4 +185,28 @@ func ModifyUserInfo(uid int64,username string,pwd string) error{
 	user.Pwd = pwd
 	o.Update(&user)
 	return err
+}
+func SaveUserAvatar(uid int64, path string) error {
+	o := orm.NewOrm()
+	qs := o.QueryTable("user").Filter("Id", uid)
+	var user User
+	err := qs.One(&user)
+	if err != nil {
+		return err
+	}
+	user.Avatar = "/" + path
+	o.Update(&user)
+	return err
+}
+func GetUserAvatar(uid int64) (path string, err error) {
+	o := orm.NewOrm()
+	qs := o.QueryTable("user").Filter("Id", uid)
+	var user User
+	err = qs.One(&user)
+	if err != nil {
+		return
+	}
+	path = user.Avatar
+	o.Update(&user)
+	return
 }

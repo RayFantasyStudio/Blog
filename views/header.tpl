@@ -26,7 +26,8 @@
     <div class="ui borderless main menu">
         <div class="ui text container">
             <div href="#" class="header item">
-                <img src="/static/img/user_avatar/[[.User.Name]]_avatar.png" class="ui centered mini image" onerror="javascript:this.src='/static/img/user_avatar/user.png'">
+                <img src="[[.avatar_path]]" class="ui centered mini image" onerror="javascript:this.src='/static/img/user_avatar/user.png'">
+
             </div>
             <div href="#" class="header item">
                 [[if .IsLogin]]

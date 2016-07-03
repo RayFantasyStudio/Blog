@@ -96,6 +96,10 @@ func (c *AdminController) Get() {
 	}
 	c.Data["UserName"] = user.Name
 
+	var avatar_path string
+	avatar_path,err = models.GetUserAvatar(int64(user.Id))
+	c.Data["avatar_path"] = avatar_path
+
 	c.TplName = "admin.tpl"
 }
 func (c *AdminController) Post() {
@@ -185,7 +189,17 @@ func (c *AdminController) Post() {
 			extension := filepath.Ext(fh.Filename)
 			fh.Filename = user_name + "_avatar" + extension
 			attachment = fh.Filename
-			err = c.SaveToFile("avatar", path.Join("static", "img", "user_avatar", attachment))
+			path := path.Join("static", "img", "user_avatar", attachment)
+			err = c.SaveToFile("avatar", path )
+			if err != nil {
+				beego.Error(err)
+			}
+			user,err := models.GetUserFromContext(c.Ctx)
+			if err != nil {
+				beego.Error(err)
+			}
+			beego.Info("uid = ",user.Id,"  path = ",path)
+			err = models.SaveUserAvatar(int64(user.Id),path)
 			if err != nil {
 				beego.Error(err)
 			}
