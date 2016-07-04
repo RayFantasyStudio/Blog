@@ -44,8 +44,6 @@ func initMySql() {
 	mysqlPort := cFile.MustValue("", "mysqlport", "3306")
 	mysqlDb := cFile.MustValue("", "mysqldb", "test")
 
-	beego.Debug(mysqlUser, mysqlPwd, mysqlHost, mysqlPort, mysqlDb)
-
 	//数据库初始化
 	orm.RegisterModel(new(Article), new(Category), new(Tag), new(Reply), new(User), new(ArticleTag))
 	orm.RegisterDriver("mysql", orm.DRMySQL)
