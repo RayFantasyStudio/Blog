@@ -2,6 +2,7 @@
 * 使用Go语言，Beego框架开发，简单的实现个人Blog
 * The Simple Blog base on Beego and using Golang
 * 项目预览 Preview [RayFantasyStudio Blog](http://blog.rayfantasy.com/)
+
 ## 如何运行
 ### 1. 获取依赖
 ```
