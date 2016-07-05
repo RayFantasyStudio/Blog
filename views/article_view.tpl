@@ -4,14 +4,14 @@
 <div class="ui  container">
     [[$author_article := .author]]
     [[$tags := .Tags]]
-    [[$IsLogin := .isLogin]]
+    [[$isLogin := .IsLogin]]
     [[with .Article]]
     <div class="ui relaxed divided items">
         <div class="ui raised segment"><a class="ui red ribbon label">
-                <div class="ui left icon input">
-                    <span style="color: white">[[.Category]]</span>
-                </div>
-            </a>
+            <div class="ui left icon input">
+                <span style="color: white">[[.Category]]</span>
+            </div>
+        </a>
             <div class="ui">
                 <div class="field" style="margin-bottom: 3px">
                     <h1>[[.Title]]</h1>
@@ -22,8 +22,9 @@
                 <div class="ui divider"></div>
                 <div class="field">
                     <h4 class="ui image header">
-                        <img src="/static/img/user_avatar/[[$author_article]]_avatar.png" class="ui mini rounded image" onerror="javascript:this.src='/static/img/user_avatar/user.png'">
-                       [[$author_article]]
+                        <img src="/static/img/user_avatar/[[$author_article]]_avatar.png" class="ui mini rounded image"
+                             onerror="javascript:this.src='/static/img/user_avatar/user.png'">
+                        [[$author_article]]
                     </h4>
                 </div>
                 <div class="field">
@@ -36,7 +37,7 @@
                         ;
                     </script>
                 </div>
-                [[if $IsLogin]]
+                [[if $isLogin]]
                 <a class="ui  green button" href="/article/modify?id=[[.Id]]">修改</a>
                 <a class="ui red button" href="/article?op=del&id=[[.Id]]">删除</a>
                 [[end]]
@@ -58,7 +59,7 @@
                             <span class="date">[[.Time | SinceTime]]</span>
                         </div>
                         [[if lt 0 .QuoteReplyId]]
-                        [[$reply_tmp :=  index $.quote_map .QuoteReplyId]]
+                        [[$reply_tmp := index $.quote_map .QuoteReplyId]]
                         <div class="ui message">
                             <div class="header">[[$reply_tmp.UserName]]</div>
                             <p>[[$reply_tmp.Content]]</p>
