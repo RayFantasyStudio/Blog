@@ -13,16 +13,6 @@ type ArticleViewController struct {
 
 func (c *ArticleViewController) Get() {
 	initHeaderFooterData(&c.Controller, owner + "的Blog")
-	c.Data["IsLogin"] = false
-	if token := c.Ctx.GetCookie("token"); len(token) != 0 {
-		if user, err := models.GetUserByToken(token); err != nil {
-			beego.Error(err)
-		} else {
-			if user == nil {
-				c.Data["IsLogin"] = false
-			}
-		}
-	}
 	raw_id := c.Input().Get("id")
 	id, err := strconv.ParseInt(raw_id, 10, 64)
 	if err != nil {
@@ -40,7 +30,7 @@ func (c *ArticleViewController) Get() {
 	}
 	c.Data["Replies"] = replies
 	//加载Tag
-	tags, err := models.GetTagAccroingAritcle(id)
+	tags,_, err := models.GetTagAccroingAritcle(id)
 	if err != nil {
 		beego.Error(err)
 	}

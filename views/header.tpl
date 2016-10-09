@@ -10,6 +10,7 @@
     <link href="/static/css/base.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
     <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
 
 </head>
 <body>

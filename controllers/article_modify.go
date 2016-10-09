@@ -22,7 +22,7 @@ func (c *ArticleModifyController) Get() {
 	article, err := models.GetArticle(id)
 	c.Data["Article"] = article
 
-	tags,err := models.GetTagAccroingAritcle(id)
+	tags,_,err := models.GetTagAccroingAritcle(id)
 	var tag_string []string
 	for _,x := range tags{
 		tag_string = append(tag_string,x.Name)

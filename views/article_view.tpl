@@ -68,7 +68,7 @@
                         <div class="text">[[.Content]]</div>
                         <div class="actions">
                             <a class="reply" href="/article/view?id=[[$aid]]&quote_rid=[[.Id]]">回复</a>
-                            [[if $IsLogin]]
+                            [[if $isLogin]]
                             <a class="reply" href="/article/view?op=delrpy&rid=[[.Id]]&aid=[[$aid]]">删除回复</a>
                             [[end]]
                         </div>
